@@ -65,7 +65,7 @@ const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Responsive drawer
+                        Welcome Channel
                     </Typography>
                     <IconButton
                         color="inherit"

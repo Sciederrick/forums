@@ -8,21 +8,20 @@ import { AppContext } from "../contexts/AppContext";
 
 const Auth = () => {
     useEffect(() => {
-        const reAuthenticate = async () => {
-            try {
-                const token = localStorage.getItem("feathers-jwt");
-                console.log("🚀 ~ reAuthenticate ~ token:", token);
-                if (token) {
-                    // Authenticate using an existing token
-                    await client.reAuthenticate();
-                    ctx?.onSetShowAuth(false);
-                }
-            } catch (err: any) {
-                ctx?.onNotif(`Reauthentication failed with: ${err}`);
-            }
-        };
         reAuthenticate();
-    });
+    }, []);
+    const reAuthenticate = async () => {
+        try {
+            const token = localStorage.getItem("feathers-jwt");
+            if (token) {
+                // Authenticate using an existing token
+                await client.reAuthenticate();
+                ctx?.onSetShowAuth(false);
+            }
+        } catch (err: any) {
+            ctx?.onNotif(`Reauthentication failed with: ${err}`);
+        }
+    };
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -85,6 +84,7 @@ const Auth = () => {
                 label="email"
                 variant="outlined"
                 fullWidth
+                autoComplete="true"
             />
             <TextField
                 onChange={handleChange}
@@ -94,6 +94,7 @@ const Auth = () => {
                 label="password"
                 variant="outlined"
                 fullWidth
+                autoComplete="true"
             />
             <Button
                 variant="contained"

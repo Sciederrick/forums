@@ -1,47 +1,38 @@
 import Divider from "@mui/material/Divider";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
+import { useContext, useEffect, useState } from "react";
+import client from "../lib/feathersClient";
+import { AppContext } from "../contexts/AppContext";
+import { User } from "../types";
 
 const ChatProfiles = () => {
+    const ctx = useContext(AppContext);
+    useEffect(() => {
+        const fetchProfiles = async () => {
+            try {
+                const profiles = await client.service("users").find();
+                setProfiles(profiles.data);
+                console.log("🚀 ~ fetchProfiles ~ profiles:", profiles);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (err: any) {
+                ctx?.onNotif(`Fetching profiles failed with err: ${err}`);
+            }
+        };
+        fetchProfiles();
+    }, []);
+
+    const [profiles, setProfiles] = useState<User[]>([]);
+
     return (
         <>
             <Divider />
-            <List>
-                {["Inbox", "Starred", "Send email", "Drafts"].map(
-                    (text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    )
-                )}
-            </List>
-            <Divider />
-            <List>
-                {["All mail", "Trash", "Spam"].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
+            <ul>
+                {profiles.map((profile) => (
+                    <li key={profile._id} className="flex items-center gap-2 p-2 text-sm">
+                        <img src={profile.avatar} height={32} width={32} className="rounded-full"/>
+                        <p>{profile.email}</p>
+                    </li>
                 ))}
-            </List>
+            </ul>
         </>
     );
 };

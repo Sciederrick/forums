@@ -1,0 +1,48 @@
+{
+    "total": 8,
+    "data": [
+        {
+            "_id": "667de12c6e21b0269df00f59",
+            "email": "hello@feathersjs.com",
+            "avatar": "https://s.gravatar.com/avatar/ffe2a09df37d7c646e974a2d2b8d3e03?s=60"
+        },
+        {
+            "_id": "667eb96c1b26ac51cce0ea7a",
+            "githubId": 26813183,
+            "email": "derrickmbarani@gmail.com",
+            "avatar": "https://avatars.githubusercontent.com/u/26813183?v=4"
+        },
+        {
+            "_id": "667ec54df5ee4d7498372f6f",
+            "email": "devacc455@gmail.com",
+            "avatar": "https://s.gravatar.com/avatar/7ae7addb0a2bf10475230b7ab3c6dd1e?s=60"
+        },
+        {
+            "_id": "667ec5b4f5ee4d7498372f71",
+            "email": "derrickmbarani@gmail.com",
+            "avatar": "https://s.gravatar.com/avatar/04db81cd32decb17df0a84906d5dd414?s=60"
+        },
+        {
+            "_id": "667ec5edf5ee4d7498372f72",
+            "email": "devacc454@gmail.com",
+            "avatar": "https://s.gravatar.com/avatar/1d412151dbf1b2b285b9423f1327d87c?s=60"
+        },
+        {
+            "_id": "668044cc094c912705eb5b91",
+            "email": "",
+            "avatar": "https://s.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?s=60"
+        },
+        {
+            "_id": "668044ce094c912705eb5b92",
+            "email": "",
+            "avatar": "https://s.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?s=60"
+        },
+        {
+            "_id": "6682e01819b78ddc2af0bca1",
+            "email": "janedoe@example.com",
+            "avatar": "https://s.gravatar.com/avatar/e1f3994f2632af3d1c8c2dcc168a10e6?s=60"
+        }
+    ],
+    "limit": 10,
+    "skip": 0
+}

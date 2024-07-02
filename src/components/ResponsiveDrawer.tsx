@@ -7,9 +7,9 @@ import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import Logout from "@mui/icons-material/Logout";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Logout from "./Logout";
 
 const drawerWidth = 240;
 
@@ -67,14 +67,7 @@ const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
                     <Typography variant="h6" noWrap component="div">
                         Welcome Channel
                     </Typography>
-                    <IconButton
-                        color="inherit"
-                        aria-label="logout"
-                        edge="end"
-                        sx={{ ml: 2 }}
-                    >
-                        <Logout />
-                    </IconButton>
+                    <Logout />
                 </Toolbar>
             </AppBar>
             <Box

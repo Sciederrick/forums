@@ -6,6 +6,7 @@ import { User } from "../types";
 
 const ChatProfiles = () => {
     const ctx = useContext(AppContext);
+    const [profiles, setProfiles] = useState<User[]>([]);
     useEffect(() => {
         const fetchProfiles = async () => {
             try {
@@ -18,17 +19,27 @@ const ChatProfiles = () => {
             }
         };
         fetchProfiles();
-    }, []);
 
-    const [profiles, setProfiles] = useState<User[]>([]);
+        client.service("users").on("created", (newProfile: User) => {
+            setProfiles((prevProfiles) => [...prevProfiles, newProfile]);
+        });
+    }, []);
 
     return (
         <>
             <Divider />
             <ul>
                 {profiles.map((profile) => (
-                    <li key={profile._id} className="flex items-center gap-2 p-2 text-sm">
-                        <img src={profile.avatar} height={32} width={32} className="rounded-full"/>
+                    <li
+                        key={profile._id}
+                        className="flex items-center gap-2 p-2 text-sm"
+                    >
+                        <img
+                            src={profile.avatar}
+                            height={32}
+                            width={32}
+                            className="rounded-full"
+                        />
                         <p>{profile.email}</p>
                     </li>
                 ))}

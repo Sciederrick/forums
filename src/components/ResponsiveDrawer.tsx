@@ -10,6 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Logout from "./Logout";
+import LoggedInAs from "./LoggedInAs";
 
 const drawerWidth = 240;
 
@@ -38,7 +39,9 @@ const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
 
     const drawer = (
         <div>
-            <Toolbar />
+            <Toolbar>
+                <LoggedInAs/>
+            </Toolbar>
             {users}
         </div>
     );

@@ -19,13 +19,13 @@ const Chat = () => {
                 .service("messages")
                 .find({ query: { $sort: { createdAt: -1 }, $limit: 25 } });
             setMsgs(msgs.data.reverse());
-            scrollToBottom();
+            setTimeout(scrollToBottom, 0);
         };
         fetchMsgs();
 
         client.service("messages").on("created", (newMsg: Msg) => {
             setMsgs((prevMsgs) => [...prevMsgs, newMsg]);
-            scrollToBottom();
+            setTimeout(scrollToBottom, 0);
         });
     }, []);
 

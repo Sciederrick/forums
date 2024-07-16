@@ -23,7 +23,7 @@ const Messages = () => {
             try {
                 const msgs = await client.service("messages").find({
                     query: {
-                        chatId: ctx?.activeChat,
+                        chatId: ctx?.activeChat?._id,
                         $sort: { createdAt: -1 },
                         $limit: 25,
                     },

@@ -4,3 +4,10 @@ export interface User {
     avatar: string;
 }
 
+export interface Chat {
+    _id: string;
+    name: string;
+    type: "group" | "dm";
+    memberIds: string[];
+    createdAt: number;
+}

@@ -11,6 +11,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Logout from "./Logout";
 import LoggedInAs from "./LoggedInAs";
+import { AppContext } from "../contexts/AppContext";
+import { useContext } from "react";
 
 const drawerWidth = 240;
 
@@ -19,6 +21,7 @@ interface Props {
     messages: React.ReactNode
 }
 const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
+    const ctx = useContext(AppContext);
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
 
@@ -68,7 +71,7 @@ const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Welcome Channel
+                        {ctx?.activeChat?.name}
                     </Typography>
                     <Logout />
                 </Toolbar>

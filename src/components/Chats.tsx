@@ -3,14 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import client from "../lib/feathersClient";
 import { AppContext } from "../contexts/AppContext";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
-
-interface Chat {
-    _id: string;
-    name: string;
-    type: "group"|"dm";
-    memberIds: string[];
-    createdAt: number;
-}
+import { Chat } from "../types";
 
 const ChatProfiles = () => {
     const ctx = useContext(AppContext);
@@ -20,11 +13,6 @@ const ChatProfiles = () => {
             try {
                 // Get chats where the logged in user is part of
                 const chats = await client.service("chats").find();
-                console.log("🚀 ~ fetchChats ~ chats:", chats);
-                console.log(
-                    "🚀 ~ fetchChats ~ ctx?.loggedInAs?._id:",
-                    ctx?.loggedInAs?._id
-                );
                 setChats(chats.data);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
@@ -33,10 +21,24 @@ const ChatProfiles = () => {
         };
         fetchChats();
 
-        client.service("chats").on("created", (newProfile: User) => {
-            setChats((prevProfiles) => [...prevProfiles, newProfile]);
-        });
+        const handleNewChat = (newChat: Chat) => {
+            const loggedInUserId = ctx?.loggedInAs?._id;
+            if (!loggedInUserId) return;
+            if (newChat.memberIds.indexOf(loggedInUserId) > -1) {
+                setChats((prevChats) => [...prevChats, newChat]);
+            }
+        };
+
+        client.service("chats").on("created", handleNewChat);
+
+        return () => {
+            client.service("chats").off(handleNewChat);
+        };
     }, []);
+
+    const handleClickOpenChat = (chat: Chat) => {
+        ctx?.onHandleSetActiveChat(chat);
+    };
 
     return (
         <>
@@ -45,9 +47,10 @@ const ChatProfiles = () => {
                 {chats.map((chat) => (
                     <li
                         key={chat._id}
-                        className="flex items-center gap-2 p-4 text-sm"
+                        className="flex items-center gap-2 p-4 text-sm cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleClickOpenChat(chat)}
                     >
-                        <ForumOutlinedIcon className="text-gray-400"/>
+                        <ForumOutlinedIcon className="text-gray-400" />
                         <p>{chat.name}</p>
                     </li>
                 ))}

@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { User } from "../types";
+import { Chat, User } from "../types";
 
 type TypeAppContext = {
     onNotif: (msg: string) => void;
@@ -9,6 +9,8 @@ type TypeAppContext = {
     onSetShowAuth: (state: boolean) => void;
     loggedInAs?: User;
     onSetLoggedInUser: (user: User) => void;
+    activeChat: Chat | undefined;
+    onHandleSetActiveChat: (id: Chat) => void;
 };
 
 export const AppContext = createContext<TypeAppContext | undefined>(undefined);
@@ -22,7 +24,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     const handleSetShowAuth = (state: boolean) => {
         setIsShowAuth(state);
     };
-    
+
     const handleNotif = (msg: string) => {
         toast(msg);
     };
@@ -33,6 +35,12 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setLoggedInUser(user);
     };
 
+    const [activeChat, setActiveChat] = useState<Chat>();
+
+    const handleSetActiveChat = (id: Chat) => {
+        setActiveChat(id);
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -40,7 +48,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                 isShowAuth,
                 onSetShowAuth: handleSetShowAuth,
                 loggedInAs: loggedInAs,
-                onSetLoggedInUser: handleSetLoggedInUser
+                onSetLoggedInUser: handleSetLoggedInUser,
+                activeChat: activeChat,
+                onHandleSetActiveChat: handleSetActiveChat,
             }}
         >
             {children}

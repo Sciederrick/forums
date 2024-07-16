@@ -20,15 +20,19 @@ const Messages = () => {
     const [msgs, setMsgs] = useState<Msg[]>([]);
     useEffect(() => {
         const fetchMsgs = async () => {
-            const msgs = await client.service("messages").find({
-                query: {
-                    chatId: ctx?.activeChat,
-                    $sort: { createdAt: -1 },
-                    $limit: 25,
-                },
-            });
-            setMsgs(msgs.data.reverse());
-            setTimeout(scrollToBottom, 0);
+            try {
+                const msgs = await client.service("messages").find({
+                    query: {
+                        chatId: ctx?.activeChat,
+                        $sort: { createdAt: -1 },
+                        $limit: 25,
+                    },
+                });
+                setMsgs(msgs.data.reverse());
+                setTimeout(scrollToBottom, 0);
+            } catch (err: any) {
+                ctx?.onNotif(`Failed fetching messages with err: ${err}`);
+            }
         };
         if (ctx?.activeChat) fetchMsgs();
 
@@ -53,11 +57,17 @@ const Messages = () => {
     };
 
     const handleSendMsg = async (e: any) => {
-        e.preventDefault();
+        try {
+            e.preventDefault();
 
-        await client.service("messages").create({ text: inputMsg });
+            await client
+                .service("messages")
+                .create({ text: inputMsg, chatId: ctx?.activeChat?._id });
 
-        setInputMsg("");
+            setInputMsg("");
+        } catch (err: any) {
+            ctx?.onNotif(`Failed sending the message with err: ${err}`);
+        }
     };
 
     const handleKeyDown = (e: any) => {
@@ -100,7 +110,7 @@ const Messages = () => {
                     type="text"
                     name="msg-input"
                     id="msg-input"
-                    className="border w-full"
+                    className="border w-full px-2"
                     value={inputMsg}
                     onChange={handleMsgInput}
                     onKeyDown={handleKeyDown}

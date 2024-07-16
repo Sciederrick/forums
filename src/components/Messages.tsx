@@ -11,7 +11,7 @@ interface Msg {
     createdAt: number;
     user: User;
 }
-const Chat = () => {
+const Messages = () => {
     const [msgs, setMsgs] = useState<Msg[]>([]);
     useEffect(() => {
         const fetchMsgs = async () => {
@@ -97,4 +97,4 @@ const Chat = () => {
     );
 };
 
-export default Chat;
+export default Messages;

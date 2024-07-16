@@ -1,5 +1,5 @@
-import Chat from "./components/Chat";
-import ChatProfiles from "./components/ChatProfiles";
+import Messages from "./components/Messages.tsx";
+import Chats from "./components/Chats.tsx";
 import Auth from "./components/Auth";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
 import { useContext } from "react";
@@ -13,8 +13,8 @@ const App = () => {
                 <Auth />
             ) : (
                 <ResponsiveDrawer
-                    profiles={<ChatProfiles />}
-                    messages={<Chat />}
+                    profiles={<Chats />}
+                    messages={<Messages />}
                 />
             )}
         </>

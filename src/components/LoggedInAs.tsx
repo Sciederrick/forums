@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { AppContext } from "../contexts/AppContext";
-import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
+import AddForum from "./AddForum";
 
 const LoggedInAs = () => {
     const ctx = useContext(AppContext);
+
     return (
         <div
             key={ctx?.loggedInAs?._id}
@@ -13,10 +14,10 @@ const LoggedInAs = () => {
                 src={ctx?.loggedInAs?.avatar}
                 height={32}
                 width={32}
-                className="rounded-full"
+                className="rounded-full cursor-pointer"
                 title={ctx?.loggedInAs?.email}
             />
-            <button className="flex flex-col items-center"><InboxOutlinedIcon className="text-gray-400"/><p className="text-xs text-gray-400">inbox</p></button>
+            <AddForum />
         </div>
     );
 };

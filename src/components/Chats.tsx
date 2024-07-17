@@ -37,6 +37,9 @@ const ChatProfiles = () => {
     }, []);
 
     const handleClickOpenChat = (chat: Chat) => {
+        // hide group details
+        if (ctx?.showGroupDetails) ctx?.onToggleGroupDetails();
+        // switch/open chat
         ctx?.onSetActiveChat(chat);
     };
 

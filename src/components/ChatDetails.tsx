@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { formatChatTimestamp } from "../utils";
 import { AppContext } from "../contexts/AppContext";
-import { Divider } from "@mui/material";
 import { User } from "../types";
 import client from "../lib/feathersClient";
 
@@ -10,6 +9,7 @@ const ChatDetails = () => {
     const [users, setUsers] = useState<User[]>([]);
     useEffect(() => {
         const fetchUsers = async () => {
+
             try {
                 const profiles = await client.service("users").find({
                     query: { _id: { $in: ctx?.activeChat?.memberIds } },
@@ -22,7 +22,7 @@ const ChatDetails = () => {
             }
         };
         fetchUsers();
-    }, []);
+    }, [ctx?.activeChat]);
 
     return (
         <>

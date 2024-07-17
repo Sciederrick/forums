@@ -34,7 +34,7 @@ const ChatDetails = () => {
                 {ctx?.activeChat?.description ? (
                     <p>{ctx?.activeChat?.description}</p>
                 ) : (
-                    <p>Add Group Description</p>
+                    <p className="text-gray-400">(empty description)</p>
                 )}
                 <p className="text-sm">
                     {ctx?.activeChat?.memberIds.length}&nbsp;members

@@ -9,7 +9,6 @@ const ChatDetails = () => {
     const [users, setUsers] = useState<User[]>([]);
     useEffect(() => {
         const fetchUsers = async () => {
-
             try {
                 const profiles = await client.service("users").find({
                     query: { _id: { $in: ctx?.activeChat?.memberIds } },
@@ -40,10 +39,10 @@ const ChatDetails = () => {
                     {ctx?.activeChat?.memberIds.length}&nbsp;members
                 </p>
             </div>
-            <div className="mx-auto h-[2px] w-[768px] my-8 bg-gray-100">
+            <div className="mx-auto h-[2px] my-8 bg-gray-100 w-full lg:w-[768px]">
                 &nbsp;
             </div>
-            <ul className="w-[768px] mx-auto">
+            <ul className="mx-auto w-full lg:w-[768px]">
                 {users.map((user: User) => (
                     <li
                         key={user._id}
@@ -57,6 +56,7 @@ const ChatDetails = () => {
                         />
                         <p>{user.email}</p>
                     </li>
+                    
                 ))}
             </ul>
         </>

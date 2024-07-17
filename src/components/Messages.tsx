@@ -6,6 +6,7 @@ import { formatChatTimestamp } from "../utils";
 import { AppContext } from "../contexts/AppContext";
 import ForumsLogoBlack from "/forums-high-resolution-logo-transparent.svg";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
+import ChatDetails from "./ChatDetails";
 
 interface Msg {
     _id: string;
@@ -143,7 +144,13 @@ const Messages = () => {
         </div>
     );
 
-    return ctx?.activeChat ? activeChatCanvas : inactiveChatCanvas;
+    const chatDetails = <ChatDetails />;
+
+    return ctx?.activeChat
+        ? ctx?.showGroupDetails
+            ? chatDetails
+            : activeChatCanvas
+        : inactiveChatCanvas;
 };
 
 export default Messages;

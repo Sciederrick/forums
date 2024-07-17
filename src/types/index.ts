@@ -8,6 +8,7 @@ export interface Chat {
     _id: string;
     name: string;
     type: "group" | "dm";
+    description?: string;
     memberIds: string[];
     createdAt: number;
 }

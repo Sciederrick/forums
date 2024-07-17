@@ -10,7 +10,10 @@ type TypeAppContext = {
     loggedInAs?: User;
     onSetLoggedInUser: (user: User) => void;
     activeChat: Chat | undefined;
-    onHandleSetActiveChat: (id: Chat) => void;
+    onSetActiveChat: (id: Chat) => void;
+    showGroupDetails: boolean;
+    onToggleGroupDetails: () => void;
+
 };
 
 export const AppContext = createContext<TypeAppContext | undefined>(undefined);
@@ -41,16 +44,24 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setActiveChat(id);
     };
 
+    const [showGroupDetails, setShowGroupDetails] = useState(false);
+
+    const handleToggleGroupDetails = () => {
+        setShowGroupDetails((prevState) => !prevState);
+    };
+
     return (
         <AppContext.Provider
             value={{
                 onNotif: handleNotif,
                 isShowAuth,
                 onSetShowAuth: handleSetShowAuth,
-                loggedInAs: loggedInAs,
+                loggedInAs,
                 onSetLoggedInUser: handleSetLoggedInUser,
-                activeChat: activeChat,
-                onHandleSetActiveChat: handleSetActiveChat,
+                activeChat,
+                onSetActiveChat: handleSetActiveChat,
+                showGroupDetails,
+                onToggleGroupDetails: handleToggleGroupDetails
             }}
         >
             {children}

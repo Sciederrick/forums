@@ -37,7 +37,7 @@ const ChatProfiles = () => {
     }, []);
 
     const handleClickOpenChat = (chat: Chat) => {
-        ctx?.onHandleSetActiveChat(chat);
+        ctx?.onSetActiveChat(chat);
     };
 
     return (

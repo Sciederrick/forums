@@ -19,7 +19,7 @@ interface Props {
     profiles: React.ReactNode;
     messages: React.ReactNode;
 }
-const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
+const ResponsiveDrawer: React.FC<Props> = ({ profiles, messages }) => {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
 
@@ -43,7 +43,7 @@ const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
             <Toolbar>
                 <LoggedInAs />
             </Toolbar>
-            {users}
+            {profiles}
         </div>
     );
 

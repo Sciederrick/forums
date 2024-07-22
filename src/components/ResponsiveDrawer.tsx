@@ -10,10 +10,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 
 import Logout from "./Logout";
-import LoggedInAs from "./LoggedInAs";
 import TitleBar from "./TitleBar";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 interface Props {
     profiles: React.ReactNode;
@@ -39,12 +38,9 @@ const ResponsiveDrawer: React.FC<Props> = ({ profiles, messages }) => {
     };
 
     const drawer = (
-        <div>
-            <Toolbar>
-                <LoggedInAs />
-            </Toolbar>
+        <>
             {profiles}
-        </div>
+        </>
     );
 
     return (

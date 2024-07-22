@@ -30,7 +30,7 @@ const AddForum = () => {
                 <Fade in={open}>
                     <ModalContent sx={style}>
                         <h2 id="transition-modal-title" className="modal-title">
-                            Text in a child modal
+                            New Forum
                         </h2>
                         <p
                             id="transition-modal-description"
@@ -92,7 +92,7 @@ const style = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    // width: 400,
 };
 
 const ModalContent = styled("div")(

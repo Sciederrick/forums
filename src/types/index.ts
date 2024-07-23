@@ -12,3 +12,8 @@ export interface Chat {
     memberIds: string[];
     createdAt: number;
 }
+
+export enum ActiveSidebarComponent {
+    newForum = "newForum",
+    groupChat = "groupChat"
+}

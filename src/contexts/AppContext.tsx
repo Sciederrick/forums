@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Chat, User } from "../types";
+import { ActiveSidebarComponent, Chat, User } from "../types";
 
 type TypeAppContext = {
     onNotif: (msg: string) => void;
@@ -13,7 +13,8 @@ type TypeAppContext = {
     onSetActiveChat: (id: Chat) => void;
     showGroupDetails: boolean;
     onToggleGroupDetails: () => void;
-
+    activeSidebarComponent: ActiveSidebarComponent;
+    onSetActiveSidebarComponent: (component: ActiveSidebarComponent) => void;
 };
 
 export const AppContext = createContext<TypeAppContext | undefined>(undefined);
@@ -33,21 +34,23 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
 
     const [loggedInAs, setLoggedInUser] = useState<User>();
-
     const handleSetLoggedInUser = (user: User) => {
         setLoggedInUser(user);
     };
 
     const [activeChat, setActiveChat] = useState<Chat>();
-
     const handleSetActiveChat = (id: Chat) => {
         setActiveChat(id);
     };
 
     const [showGroupDetails, setShowGroupDetails] = useState(false);
-
     const handleToggleGroupDetails = () => {
         setShowGroupDetails((prevState) => !prevState);
+    };
+
+    const [activeSidebarComponent, setActiveSidebarComponent] = useState(ActiveSidebarComponent.groupChat);
+    const handleSetActiveSidebarComponent = (component: ActiveSidebarComponent) => {
+        setActiveSidebarComponent(component);
     };
 
     return (
@@ -61,7 +64,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                 activeChat,
                 onSetActiveChat: handleSetActiveChat,
                 showGroupDetails,
-                onToggleGroupDetails: handleToggleGroupDetails
+                onToggleGroupDetails: handleToggleGroupDetails,
+                activeSidebarComponent,
+                onSetActiveSidebarComponent: handleSetActiveSidebarComponent
             }}
         >
             {children}

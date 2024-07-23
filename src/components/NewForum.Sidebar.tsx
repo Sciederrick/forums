@@ -3,7 +3,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useContext, useEffect, useState } from "react";
 import debounce from "lodash/debounce";
 import client from "../lib/feathersClient";
-import { User } from "../types";
+import { ActiveSidebarComponent, User } from "../types";
 import { AppContext } from "../contexts/AppContext";
 import { Divider } from "@mui/material";
 
@@ -20,6 +20,14 @@ const NewGroup = () => {
     const handleToggleSearch = () => {
         setShowSearch((prevState) => !prevState);
     };
+    const handleClickBackBtn = () => {
+        if (!showSearch) {
+            // TODO: show group chats
+            ctx?.onSetActiveSidebarComponent(ActiveSidebarComponent.groupChat);
+        } else {
+            setShowSearch((prevState) => !prevState);
+        }
+    }
 
     const searchUsers = debounce(async (email) => {
         try {
@@ -74,25 +82,25 @@ const NewGroup = () => {
         <>
             <div className="flex justify-between gap-2 px-3 py-4">
                 <div className="flex items-center gap-4">
+                    <button onClick={handleClickBackBtn}>
+                        <ArrowBackIosOutlinedIcon />
+                    </button>
                     {showSearch ? (
-                        <>
-                            <button onClick={handleToggleSearch}>
-                                <ArrowBackIosOutlinedIcon />
-                            </button>
-                            <input
-                                onChange={handleChange}
-                                id="search"
-                                name="search"
-                                autoComplete="true"
-                                placeholder="type to search ..."
-                                className="w-full h-[32px] focus:outline-none"
-                                autoFocus
-                            />
-                        </>
+                        <input
+                            onChange={handleChange}
+                            id="search"
+                            name="search"
+                            autoComplete="true"
+                            placeholder="type to search ..."
+                            className="w-full h-[32px] focus:outline-none"
+                            autoFocus
+                        />
                     ) : (
                         <div className="h-[32px] flex flex-col justify-center pl-3">
                             <h2>New Forum</h2>
-                            <h3 className="text-sm text-gray-400">Add humans</h3>
+                            <h3 className="text-sm text-gray-400">
+                                Add humans
+                            </h3>
                         </div>
                     )}
                 </div>

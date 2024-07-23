@@ -5,7 +5,7 @@ import { AppContext } from "../contexts/AppContext";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import { Chat } from "../types";
 import { Toolbar } from "@mui/material";
-import LoggedInAs from "./LoggedInAs";
+import MyToolbar from "./Toolbar.Sidebar";
 
 const ChatProfiles = () => {
     const ctx = useContext(AppContext);
@@ -48,7 +48,7 @@ const ChatProfiles = () => {
     return (
         <>
             <Toolbar>
-                <LoggedInAs />
+                <MyToolbar />
             </Toolbar>
             <Divider />
             <ul>

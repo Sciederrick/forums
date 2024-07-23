@@ -1,10 +1,11 @@
 import Messages from "./components/Messages.tsx";
-import Chats from "./components/Chats.tsx";
+import Chats from "./components/Chats.Sidebar.tsx";
 import Auth from "./components/Auth";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
 import { useContext } from "react";
 import { AppContext } from "./contexts/AppContext";
-import NewGroup from "./components/NewForum.tsx";
+import NewForum from "./components/NewForum.Sidebar.tsx";
+import { ActiveSidebarComponent } from "./types/index.ts";
 
 const App = () => {
     const ctx = useContext(AppContext);
@@ -14,7 +15,7 @@ const App = () => {
                 <Auth />
             ) : (
                 <ResponsiveDrawer
-                    profiles={true ? <NewGroup /> : <Chats />}
+                    profiles={ctx?.activeSidebarComponent == ActiveSidebarComponent.newForum ? <NewForum /> : <Chats />}
                     messages={<Messages />}
                 />
             )}

@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { AppContext } from "../contexts/AppContext";
-import AddForum from "./AddForum";
+import Actions from "./Actions.Sidebar";
 
-const LoggedInAs = () => {
+const MyToolbar = () => {
     const ctx = useContext(AppContext);
 
     return (
@@ -17,9 +17,9 @@ const LoggedInAs = () => {
                 className="rounded-full cursor-pointer"
                 title={ctx?.loggedInAs?.email}
             />
-            <AddForum />
+            <Actions />
         </div>
     );
 };
 
-export default LoggedInAs;
+export default MyToolbar;

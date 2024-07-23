@@ -91,8 +91,8 @@ const NewGroup = () => {
                         </>
                     ) : (
                         <div className="h-[32px] flex flex-col justify-center pl-3">
-                            <p>New Forum</p>
-                            <p className="text-sm">Add humans</p>
+                            <h2>New Forum</h2>
+                            <h3 className="text-sm text-gray-400">Add humans</h3>
                         </div>
                     )}
                 </div>

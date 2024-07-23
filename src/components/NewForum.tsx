@@ -55,35 +55,42 @@ const NewGroup = () => {
     useEffect(() => {
         // Get all users on mounted
         if (!isAlreadyExecuted) {
-            console.log("🚀 ~ useEffect ~ isAlreadyExecuted:", isAlreadyExecuted)
+            console.log(
+                "🚀 ~ useEffect ~ isAlreadyExecuted:",
+                isAlreadyExecuted
+            );
             getAllUsers();
             setIsAlreadyExecuted(true);
         } else {
-            console.log("🚀 ~ useEffect ~ isAlreadyExecuted:", isAlreadyExecuted)
-			// Search users on search
-			// searchUsers(searchTerm);
-		}
-
+            console.log(
+                "🚀 ~ useEffect ~ isAlreadyExecuted:",
+                isAlreadyExecuted
+            );
+            // Search users on search
+            // searchUsers(searchTerm);
+        }
     }, [searchTerm]);
     return (
         <>
             <div className="flex justify-between gap-2 px-3 py-4">
                 <div className="flex items-center gap-4">
-                    <button onClick={handleToggleSearch}>
-                        <ArrowBackIosOutlinedIcon />
-                    </button>
                     {showSearch ? (
-                        <input
-                            onChange={handleChange}
-                            id="search"
-                            name="search"
-                            autoComplete="true"
-                            placeholder="type to search ..."
-                            className="w-full h-[32px] focus:outline-none"
-                            autoFocus
-                        />
+                        <>
+                            <button onClick={handleToggleSearch}>
+                                <ArrowBackIosOutlinedIcon />
+                            </button>
+                            <input
+                                onChange={handleChange}
+                                id="search"
+                                name="search"
+                                autoComplete="true"
+                                placeholder="type to search ..."
+                                className="w-full h-[32px] focus:outline-none"
+                                autoFocus
+                            />
+                        </>
                     ) : (
-                        <div className="h-[32px] flex flex-col justify-center">
+                        <div className="h-[32px] flex flex-col justify-center pl-3">
                             <p>New Forum</p>
                             <p className="text-sm">Add humans</p>
                         </div>

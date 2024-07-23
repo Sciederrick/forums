@@ -27,16 +27,15 @@ const NewGroup = () => {
         } else {
             setShowSearch((prevState) => !prevState);
         }
-    }
+    };
 
     const searchUsers = debounce(async (email) => {
         try {
             if (email) {
                 const response = await client.service("users").find({
                     query: {
-                        // email: { $regex: new RegExp(email, 'i')},
-                        email,
-                        $limit: 10,
+                        email: { $regex: email, $options: "im" },
+                        // $limit: 10,
                     },
                 });
                 setUsers(response.data);
@@ -75,7 +74,11 @@ const NewGroup = () => {
                 isAlreadyExecuted
             );
             // Search users on search
-            // searchUsers(searchTerm);
+            if (searchTerm.trim() == "") {
+                getAllUsers();
+            } else {
+                searchUsers(searchTerm);
+            }
         }
     }, [searchTerm]);
     return (

@@ -20,6 +20,7 @@ const Actions = () => {
     const id = open ? "simple-popover" : undefined;
 
     const handleClickCreateForum = () => {
+        ctx?.onSetActiveChat(undefined); // reset active chat to display nothing
         ctx?.onSetActiveSidebarComponent(ActiveSidebarComponent.newForum);
     };
 

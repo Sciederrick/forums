@@ -10,7 +10,7 @@ type TypeAppContext = {
     loggedInAs?: User;
     onSetLoggedInUser: (user: User) => void;
     activeChat: Chat | undefined;
-    onSetActiveChat: (id: Chat) => void;
+    onSetActiveChat: (id: Chat | undefined) => void;
     showGroupDetails: boolean;
     onToggleGroupDetails: () => void;
     activeSidebarComponent: ActiveSidebarComponent;
@@ -48,8 +48,12 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setShowGroupDetails((prevState) => !prevState);
     };
 
-    const [activeSidebarComponent, setActiveSidebarComponent] = useState(ActiveSidebarComponent.groupChat);
-    const handleSetActiveSidebarComponent = (component: ActiveSidebarComponent) => {
+    const [activeSidebarComponent, setActiveSidebarComponent] = useState(
+        ActiveSidebarComponent.groupChat
+    );
+    const handleSetActiveSidebarComponent = (
+        component: ActiveSidebarComponent
+    ) => {
         setActiveSidebarComponent(component);
     };
 
@@ -66,7 +70,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                 showGroupDetails,
                 onToggleGroupDetails: handleToggleGroupDetails,
                 activeSidebarComponent,
-                onSetActiveSidebarComponent: handleSetActiveSidebarComponent
+                onSetActiveSidebarComponent: handleSetActiveSidebarComponent,
             }}
         >
             {children}

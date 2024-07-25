@@ -51,11 +51,11 @@ const ChatProfiles = () => {
                 <MyToolbar />
             </Toolbar>
             <Divider />
-            <ul>
+            <ul className="flex flex-col gap-[1.5px]">
                 {chats.map((chat) => (
                     <li
                         key={chat._id}
-                        className="flex items-center gap-2 p-4 text-sm cursor-pointer hover:bg-gray-100"
+                        className={`flex items-center gap-2 p-4 text-sm cursor-pointer hover:bg-gray-100 ${ctx?.activeChat?._id == chat._id ? 'bg-gray-100' : ''}`}
                         onClick={() => handleClickOpenChat(chat)}
                     >
                         <ForumOutlinedIcon className="text-gray-400" />

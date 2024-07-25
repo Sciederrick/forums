@@ -22,15 +22,17 @@ const Messages = () => {
     useEffect(() => {
         const fetchMsgs = async () => {
             try {
-                const msgs = await client.service("messages").find({
-                    query: {
-                        chatId: ctx?.activeChat?._id,
-                        $sort: { createdAt: -1 },
-                        $limit: 25,
-                    },
-                });
+                if (ctx?.activeChat?._id) {
+                    const msgs = await client.service("messages").find({
+                        query: {
+                            chatId: ctx.activeChat._id,
+                            $sort: { createdAt: -1 },
+                            $limit: 25,
+                        },
+                    });
                 setMsgs(msgs.data.reverse());
                 setTimeout(scrollToBottom, 0);
+                }
             } catch (err: any) {
                 ctx?.onNotif(`Failed fetching messages with err: ${err}`);
             }

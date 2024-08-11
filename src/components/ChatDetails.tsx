@@ -25,7 +25,7 @@ const ChatDetails = () => {
 
     return (
         <div className="lg:w-[540px]">
-            <div className="w-full rounded shadow px-3 py-4 flex flex-col gap-4 bg-gray-50">
+            <div className="w-full rounded px-3 py-4 flex flex-col gap-4 bg-gray-50">
                 <p className="text-xs text-gray-400">
                     Created:{" "}
                     {formatChatTimestamp(ctx?.activeChat?.createdAt ?? 0)}

@@ -16,6 +16,9 @@ const MyToolbar = () => {
                 width={32}
                 className="rounded-full cursor-pointer"
                 title={ctx?.loggedInAs?.email}
+                onClick={() =>
+                    ctx?.onSetUserDetailsUserId(ctx?.loggedInAs?._id ?? null)
+                }
             />
             <Actions />
         </div>

@@ -83,6 +83,10 @@ const Messages = () => {
         bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
     };
 
+    const handleShowUserProfile = (id: string) => {
+        ctx?.onSetUserDetailsUserId(id);
+    };
+
     const activeChatCanvas = (
         <>
             <ul className="h-[75vh] overflow-y-scroll pb-16 mb-4 md:h-[80vh]">
@@ -92,10 +96,16 @@ const Messages = () => {
                             src={msg.user.avatar}
                             width={32}
                             height={32}
-                            className="rounded-full"
+                            className="rounded-full cursor-pointer"
+                            onClick={() => handleShowUserProfile(msg.userId)}
                         />
                         <div className="flex flex-col max-w-xl">
-                            <p className="text-xs text-gray-400">
+                            <p
+                                className="text-xs text-gray-400 cursor-pointer hover:underline"
+                                onClick={() =>
+                                    handleShowUserProfile(msg.userId)
+                                }
+                            >
                                 {msg.user.email}
                             </p>
                             <p className="text-sm py-1">{msg.text}</p>

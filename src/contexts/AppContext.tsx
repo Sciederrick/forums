@@ -13,6 +13,8 @@ type TypeAppContext = {
     onSetActiveChat: (id: Chat | undefined) => void;
     showGroupDetails: boolean;
     onToggleGroupDetails: () => void;
+    userDetailsUserId: string | null;
+    onSetUserDetailsUserId: (id: string | null) => void;
     activeSidebarComponent: ActiveSidebarComponent;
     onSetActiveSidebarComponent: (component: ActiveSidebarComponent) => void;
 };
@@ -57,6 +59,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setActiveSidebarComponent(component);
     };
 
+    const [userDetailsUserId, setUserDetailsUserId] = useState<string | null>(null);
+    const handleSetUserDetailsUserId = (id: string | null) => {
+        setUserDetailsUserId(id);
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -71,6 +78,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                 onToggleGroupDetails: handleToggleGroupDetails,
                 activeSidebarComponent,
                 onSetActiveSidebarComponent: handleSetActiveSidebarComponent,
+                userDetailsUserId,
+                onSetUserDetailsUserId: handleSetUserDetailsUserId,
             }}
         >
             {children}

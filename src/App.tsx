@@ -7,9 +7,19 @@ import { AppContext } from "./contexts/AppContext";
 import NewForum from "./components/NewForum.Sidebar.tsx";
 import { ActiveSidebarComponent } from "./types/index.ts";
 import ResponsiveDialog from "./components/ResponsiveDialog.tsx";
+import ChatDetails from "./components/ChatDetails.tsx";
+import ContactDetails from "./components/ContactDetails.tsx";
 
 const App = () => {
     const ctx = useContext(AppContext);
+
+    const handleCloseGroupInfoDialog = () => {
+        ctx?.onToggleGroupDetails();
+    };
+
+    const handleCloseContactInfoDialog = () => {
+        ctx?.onSetUserDetailsUserId(null);
+    };
     return (
         <>
             {ctx?.isShowAuth ? (
@@ -27,7 +37,18 @@ const App = () => {
                         }
                         messages={<Messages />}
                     />
-                    <ResponsiveDialog />
+                    <ResponsiveDialog
+                        title="Group Info"
+                        component={<ChatDetails />}
+                        isOpen={ctx?.showGroupDetails ?? false}
+                        onHandleClose={handleCloseGroupInfoDialog}
+                    />
+                    <ResponsiveDialog
+                        title="Contact Info"
+                        component={<ContactDetails />}
+                        isOpen={ctx?.userDetailsUserId != null}
+                        onHandleClose={handleCloseContactInfoDialog}
+                    />
                 </>
             )}
         </>

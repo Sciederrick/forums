@@ -39,7 +39,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
 
     const [activeChat, setActiveChat] = useState<Chat>();
-    const handleSetActiveChat = (id: Chat) => {
+    const handleSetActiveChat = (id: Chat | undefined) => {
         setActiveChat(id);
     };
 

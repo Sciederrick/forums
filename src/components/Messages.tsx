@@ -6,7 +6,6 @@ import { formatChatTimestamp } from "../utils";
 import { AppContext } from "../contexts/AppContext";
 import ForumsLogoBlack from "/forums-high-resolution-logo-transparent.svg";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
-import ChatDetails from "./ChatDetails";
 
 interface Msg {
     _id: string;
@@ -30,8 +29,8 @@ const Messages = () => {
                             $limit: 25,
                         },
                     });
-                setMsgs(msgs.data.reverse());
-                setTimeout(scrollToBottom, 0);
+                    setMsgs(msgs.data.reverse());
+                    setTimeout(scrollToBottom, 0);
                 }
             } catch (err: any) {
                 ctx?.onNotif(`Failed fetching messages with err: ${err}`);
@@ -146,13 +145,7 @@ const Messages = () => {
         </div>
     );
 
-    const chatDetails = <ChatDetails />;
-
-    return ctx?.activeChat
-        ? ctx?.showGroupDetails
-            ? chatDetails
-            : activeChatCanvas
-        : inactiveChatCanvas;
+    return ctx?.activeChat ? activeChatCanvas : inactiveChatCanvas;
 };
 
 export default Messages;

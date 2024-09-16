@@ -35,7 +35,7 @@ const ContactDetails = () => {
     return (
         <div className="lg:w-[540px]">
             <div className="relative w-full rounded px-3 py-4 flex flex-col gap-4 bg-gray-50 mt-8 pt-10">
-                <div className=" absolute -top-8 z-10 bg-white rounded-full">
+                <div className="absolute -top-8 z-10 bg-white rounded-full">
                     <img
                         src={user?.avatar}
                         width={64}

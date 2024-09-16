@@ -10,7 +10,7 @@ type TypeAppContext = {
     loggedInAs?: User;
     onSetLoggedInUser: (user: User) => void;
     activeChat: Chat | undefined;
-    onSetActiveChat: (id: Chat | undefined) => void;
+    onSetActiveChat: (chat: Chat | undefined) => void;
     showGroupDetails: boolean;
     onToggleGroupDetails: () => void;
     userDetailsUserId: string | null;
@@ -41,8 +41,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
 
     const [activeChat, setActiveChat] = useState<Chat>();
-    const handleSetActiveChat = (id: Chat | undefined) => {
-        setActiveChat(id);
+    const handleSetActiveChat = (chat: Chat | undefined) => {
+        setActiveChat(chat);
     };
 
     const [showGroupDetails, setShowGroupDetails] = useState(false);

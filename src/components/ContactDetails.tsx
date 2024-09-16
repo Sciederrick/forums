@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 // import { formatChatTimestamp } from "../utils";
 import { AppContext } from "../contexts/AppContext";
-import { User } from "../types";
+import { Chat, User } from "../types";
 import client from "../lib/feathersClient";
 
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
@@ -11,6 +11,27 @@ import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 const ContactDetails = () => {
     const ctx = useContext(AppContext);
     const [user, setUser] = useState<User | null>(null);
+    const messageUser = async () => {
+        // @TODO: Look for existing chat with the user, `findChat`
+        const existingChat = await client.service("chats").find({
+            query: { type: "dm", memberIds: { $in: [user?._id] } },
+        });
+        console.log("🚀 ~ chat ~ chat:", existingChat);
+        // @TODO: If non-existent, create one
+        let newChat: Chat | null = null;
+        if (existingChat.total == 0) {
+            newChat = await client.service("chats").create({
+                type: "dm",
+                memberIds: [ctx?.loggedInAs?._id, user?._id],
+            });
+        }
+        console.log("🚀 ~ newChat ~ newChat:", newChat);
+        // @TODO: Otherwise, setActiveChat using the result of `findChat`
+        ctx?.onSetActiveChat(
+            existingChat?.total > 0 ? existingChat?.data[0] : newChat
+        );
+        console.log("🚀 ~ messageUser ~ ctx:", ctx?.activeChat);
+    };
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -51,7 +72,7 @@ const ContactDetails = () => {
                         &nbsp;
                     </div>
                     <div className="flex flex-col items-start gap-6">
-                        <button className="font-semibold">
+                        <button className="font-semibold" onClick={messageUser}>
                             <MailOutlineOutlinedIcon />
                             &nbsp; Direct Message
                         </button>

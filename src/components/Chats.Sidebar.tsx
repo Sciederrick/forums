@@ -14,7 +14,7 @@ const ChatProfiles = () => {
         const fetchChats = async () => {
             try {
                 // Get chats where the logged in user is part of
-                const chats = await client.service("chats").find();
+                const chats = await client.service("chats").find({ query: { type: 'group' } });
                 setChats(chats.data);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {

@@ -6,6 +6,7 @@ import client from "../lib/feathersClient";
 
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import ReportOutlinedIcon from "@mui/icons-material/ReportOutlined";
+import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 
 const ContactDetails = () => {
     const ctx = useContext(AppContext);
@@ -50,6 +51,10 @@ const ContactDetails = () => {
                         &nbsp;
                     </div>
                     <div className="flex flex-col items-start gap-6">
+                        <button className="font-semibold">
+                            <MailOutlineOutlinedIcon />
+                            &nbsp; Direct Message
+                        </button>
                         <button
                             className="font-semibold text-red-600 hover:text-red-800"
                             title="coming soon"

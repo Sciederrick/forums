@@ -8,16 +8,17 @@ import IconButton from "@mui/material/IconButton";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Logout from "./Logout";
 
-const drawerWidth = 240;
+import Logout from "./Logout";
+import TitleBar from "./TitleBar";
+
+const drawerWidth = 280;
 
 interface Props {
-    profiles: React.ReactNode,
-    messages: React.ReactNode
+    profiles: React.ReactNode;
+    messages: React.ReactNode;
 }
-const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
+const ResponsiveDrawer: React.FC<Props> = ({ profiles, messages }) => {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
 
@@ -37,10 +38,9 @@ const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
     };
 
     const drawer = (
-        <div>
-            <Toolbar />
-            {users}
-        </div>
+        <>
+            {profiles}
+        </>
     );
 
     return (
@@ -54,7 +54,7 @@ const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
                     boxShadow: "none",
                 }}
             >
-                <Toolbar className="flex justify-between bg-white text-gray-900">
+                <Toolbar className="flex justify-between bg-white text-gray-900 border-b border-gray-200">
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -64,9 +64,7 @@ const ResponsiveDrawer: React.FC<Props> = ({ profiles: users, messages }) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Welcome Channel
-                    </Typography>
+                    <TitleBar />
                     <Logout />
                 </Toolbar>
             </AppBar>

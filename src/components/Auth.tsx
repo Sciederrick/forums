@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import TextField from "@mui/material/TextField";
-import Logo from "./../assets/logo-1.png";
+import Logo from "/forums-high-resolution-logo-transparent.svg";
 import Button from "@mui/material/Button";
 import client from "../lib/feathersClient";
 import { useContext, useEffect, useState } from "react";
@@ -15,8 +15,9 @@ const Auth = () => {
             const token = localStorage.getItem("feathers-jwt");
             if (token) {
                 // Authenticate using an existing token
-                await client.reAuthenticate();
+                const response = await client.reAuthenticate();
                 ctx?.onSetShowAuth(false);
+                ctx?.onSetLoggedInUser(response.user);
             }
         } catch (err: any) {
             ctx?.onNotif(`Reauthentication failed with: ${err}`);
@@ -43,9 +44,10 @@ const Auth = () => {
                 email: formData.email,
                 password: formData.password,
             });
-
+            
             localStorage.setItem("feathers-jwt", response.accessToken);
             ctx?.onSetShowAuth(false);
+            ctx?.onSetLoggedInUser(response.user);
         } catch (err: any) {
             ctx?.onNotif(`Login failed with: ${err}`);
         }

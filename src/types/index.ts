@@ -10,6 +10,7 @@ export interface Chat {
     type: "group" | "dm";
     description?: string;
     memberIds: string[];
+    dmRecipients?: User[];
     createdAt: number;
 }
 

@@ -1,36 +1,21 @@
 import { useContext, useEffect, useState } from "react";
-// import { formatChatTimestamp } from "../utils";
 import { AppContext } from "../contexts/AppContext";
-import { Chat, User } from "../types";
+import { User } from "../types";
 import client from "../lib/feathersClient";
 
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import ReportOutlinedIcon from "@mui/icons-material/ReportOutlined";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
+import useMessageUser from "../hooks/useMessageUser";
 
 const ContactDetails = () => {
     const ctx = useContext(AppContext);
     const [user, setUser] = useState<User | null>(null);
-    const messageUser = async () => {
-        // @TODO: Look for existing chat with the user, `findChat`
-        const existingChat = await client.service("chats").find({
-            query: { type: "dm", memberIds: { $in: [user?._id] } },
-        });
-        console.log("🚀 ~ chat ~ chat:", existingChat);
-        // @TODO: If non-existent, create one
-        let newChat: Chat | null = null;
-        if (existingChat.total == 0) {
-            newChat = await client.service("chats").create({
-                type: "dm",
-                memberIds: [ctx?.loggedInAs?._id, user?._id],
-            });
+    const { messageUser } = useMessageUser(ctx);
+    const handleMessageUser = () => {
+        if (user) {
+            messageUser(user);
         }
-        console.log("🚀 ~ newChat ~ newChat:", newChat);
-        // @TODO: Otherwise, setActiveChat using the result of `findChat`
-        ctx?.onSetActiveChat(
-            existingChat?.total > 0 ? existingChat?.data[0] : newChat
-        );
-        console.log("🚀 ~ messageUser ~ ctx:", ctx?.activeChat);
     };
     useEffect(() => {
         const fetchUsers = async () => {
@@ -39,11 +24,6 @@ const ContactDetails = () => {
                 const profile = await client
                     .service("users")
                     .find({ query: { _id: ctx?.userDetailsUserId } });
-                console.log(
-                    "🚀 ~ fetchUsers ~ ctx?.userDetailsUserId:",
-                    ctx?.userDetailsUserId
-                );
-                console.log("🚀 ~ fetchUsers ~ profile:", profile);
                 setUser(profile.data[0]);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
@@ -72,7 +52,7 @@ const ContactDetails = () => {
                         &nbsp;
                     </div>
                     <div className="flex flex-col items-start gap-6">
-                        <button className="font-semibold" onClick={messageUser}>
+                        <button className="font-semibold" onClick={handleMessageUser}>
                             <MailOutlineOutlinedIcon />
                             &nbsp; Direct Message
                         </button>

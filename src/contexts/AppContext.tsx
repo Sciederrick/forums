@@ -3,7 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ActiveSidebarComponent, Chat, User } from "../types";
 
-type TypeAppContext = {
+export type TypeAppContext = {
     onNotif: (msg: string) => void;
     isShowAuth: boolean;
     onSetShowAuth: (state: boolean) => void;

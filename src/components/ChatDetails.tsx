@@ -4,6 +4,8 @@ import { AppContext } from "../contexts/AppContext";
 import { User } from "../types";
 import client from "../lib/feathersClient";
 
+import useMessageUser from "../hooks/useMessageUser";
+
 const ChatDetails = () => {
     const ctx = useContext(AppContext);
     const [users, setUsers] = useState<User[]>([]);
@@ -14,7 +16,6 @@ const ChatDetails = () => {
                     query: { _id: { $in: ctx?.activeChat?.memberIds } },
                 });
                 setUsers(profiles.data);
-                console.log("🚀 ~ fetchUsers ~ users:", profiles);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
                 ctx?.onNotif(`Fetching users failed with err: ${err}`);
@@ -22,6 +23,12 @@ const ChatDetails = () => {
         };
         fetchUsers();
     }, [ctx?.activeChat]);
+
+    const { messageUser } = useMessageUser(ctx);
+    const handleMessageUser = (user: User) => {
+        messageUser(user);
+        ctx?.onToggleGroupDetails();
+    };
 
     return (
         <div className="lg:w-[540px]">
@@ -46,17 +53,30 @@ const ChatDetails = () => {
                 {users.map((user: User) => (
                     <li
                         key={user._id}
-                        className="flex items-center gap-2 p-2 text-sm my-2 bg-gray-50 rounded cursor-pointer"
+                        className="flex items-center justify-between p-2 text-sm my-2 bg-gray-50 rounded cursor-pointer"
                     >
-                        <img
-                            src={user.avatar}
-                            height={32}
-                            width={32}
-                            className="rounded-full"
-                        />
-                        <p>{user.email}</p>
+                        <div className="flex items-center gap-2">
+                            <img
+                                src={user.avatar}
+                                height={32}
+                                width={32}
+                                className="rounded-full"
+                            />
+                            {ctx?.loggedInAs?._id == user._id ? (
+                                <p>You</p>
+                            ) : (
+                                <p>{user.email}</p>
+                            )}
+                        </div>
+                        {ctx?.loggedInAs?._id != user._id && (
+                            <button
+                                className="font-medium underline"
+                                onClick={() => handleMessageUser(user)}
+                            >
+                                Message
+                            </button>
+                        )}
                     </li>
-                    
                 ))}
             </ul>
         </div>

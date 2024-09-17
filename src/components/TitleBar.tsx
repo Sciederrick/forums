@@ -19,7 +19,7 @@ const TitleBar = () => {
             title={ctx?.activeChat?.name}
             onClick={handleClickChatDetails}
         >
-            {ctx?.activeChat?.name}&nbsp;
+            {ctx?.activeChat?.name ?? "Chat Info"}&nbsp;
             {ctx?.activeChat && <InfoOutlinedIcon color="disabled" />}
         </Typography>
     );

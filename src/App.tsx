@@ -38,7 +38,11 @@ const App = () => {
                         messages={<Messages />}
                     />
                     <ResponsiveDialog
-                        title="Group Info"
+                        title={
+                            ctx?.activeChat?.type == "group"
+                                ? "Group Info"
+                                : "Chat Info"
+                        }
                         component={<ChatDetails />}
                         isOpen={ctx?.showGroupDetails ?? false}
                         onHandleClose={handleCloseGroupInfoDialog}

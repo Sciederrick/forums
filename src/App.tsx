@@ -37,16 +37,18 @@ const App = () => {
                         }
                         messages={<Messages />}
                     />
-                    <ResponsiveDialog
-                        title={
-                            ctx?.activeChat?.type == "group"
-                                ? "Group Info"
-                                : "Chat Info"
-                        }
-                        component={<ChatDetails />}
-                        isOpen={ctx?.showGroupDetails ?? false}
-                        onHandleClose={handleCloseGroupInfoDialog}
-                    />
+                    {ctx?.activeChat && (
+                        <ResponsiveDialog
+                            title={
+                                ctx?.activeChat?.type == "group"
+                                    ? "Group Info"
+                                    : "Chat Info"
+                            }
+                            component={<ChatDetails />}
+                            isOpen={ctx?.showGroupDetails ?? false}
+                            onHandleClose={handleCloseGroupInfoDialog}
+                        />
+                    )}
                     <ResponsiveDialog
                         title="Contact Info"
                         component={<ContactDetails />}

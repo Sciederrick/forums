@@ -9,7 +9,7 @@
 - A user can view another user's profile - DONE
 - A user can modify his username & about on his profile
 - Prioritize the username when displaying user info on the messages
-- Add DM functionality
+- Add DM functionality - DONE
 - A user can only see their friends when creating a forum (when adding members)
 - Adding a member sends a messsage request to accept the forum invite (accept or decline)
 - Add admin role to the forums

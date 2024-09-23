@@ -16,8 +16,6 @@ const useMessageUser = (ctx: TypeAppContext | undefined) => {
 
             try {
                 // #1. Look for existing chat with the user, `findChat`
-                // @TODO: this does not work right
-                // It returns an existing chat despite user._id for memberIds not matching
                 const existingChat = await client.service("chats").find({
                     query: { type: "dm", memberIds: { $in: [user._id] } },
                 });

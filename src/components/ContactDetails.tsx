@@ -132,7 +132,10 @@ const ContactDetails = () => {
                         &nbsp;
                     </div>
                     <div className="flex flex-col items-start gap-6">
-                        <button className="font-semibold" onClick={handleMessageUser}>
+                        <button
+                            className="font-semibold"
+                            onClick={handleMessageUser}
+                        >
                             <MailOutlineOutlinedIcon />
                             &nbsp; Direct Message
                         </button>

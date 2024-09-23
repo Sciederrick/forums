@@ -2,6 +2,8 @@ export interface User {
     _id: string;
     email: string;
     avatar: string;
+    username?: string;
+    description?: string;
 }
 
 export interface Chat {

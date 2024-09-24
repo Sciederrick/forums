@@ -19,6 +19,9 @@ const ContactDetails = () => {
             messageUser(user);
         }
     };
+    const handleUpdatedUser = (user: User) => {
+        setUser(user);
+    };
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -33,6 +36,13 @@ const ContactDetails = () => {
             }
         };
         fetchUsers();
+
+        // Track user profile updates
+        client.service("users").on("patched", handleUpdatedUser);
+
+        return () => {
+            client.service("users").off(handleUpdatedUser);
+        }
     }, [ctx?.userDetailsUserId]);
 
     // Edit Mode For the Current User's Profile
@@ -47,14 +57,56 @@ const ContactDetails = () => {
             setIsEditProfile(el);
         }
     };
-	const [username, setUsername] = useState('');
-	const handleChangeUsername = (e: any) => {
-		setUsername(e.target.value);
-	};
-	const [description, setDescription] = useState("");
-	const handleChangeDescription = (e: any) => {
-		setDescription(e.target.value);
-	};
+    const [username, setUsername] = useState("");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleChangeUsername = (e: any) => {
+        setUsername(e.target.value);
+    };
+    const [description, setDescription] = useState("");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleChangeDescription = (e: any) => {
+        setDescription(e.target.value);
+    };
+    type Process = "Username" | "Description";
+    const [isProcessing, setIsProcessing] = useState<Process | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleUpdateUsername = async (e: any) => {
+        try {
+            if (e.key === "Enter") {
+                e.currentTarget.blur();
+                setIsProcessing("Username");
+                await client
+                    .service("users")
+                    .patch(ctx?.loggedInAs?._id, { username });
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            ctx?.onNotif(`Updating the username failed with error: ${err}`);
+        } finally {
+            setIsProcessing(null);
+        }
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleUpdateDescription = async (e: any) => {
+        try {
+            if (e.key === "Enter") {
+                e.currentTarget.blur();
+                setIsProcessing("Description");
+                await client
+                    .service("users")
+                    .patch(ctx?.loggedInAs?._id, { description });
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            ctx?.onNotif(`Updating the description failed with error: ${err}`);
+        } finally {
+            setIsProcessing(null);
+        }
+    };
+    // Switch of edit mode on input blur
+    const handleInputBlur = () => {
+        setIsEditProfile(null);
+    };
 
     return (
         <div className="lg:w-[540px]">
@@ -67,62 +119,90 @@ const ContactDetails = () => {
                         className="rounded-full"
                     />
                 </div>
-                <p className="text-sm">
+                <p className="text-sm flex items-center">
                     {user?.email}&nbsp;·&nbsp;
-                    {user?.username}
+                    {!isEditProfile && user?.username}
                     {!user?.username &&
                         ctx?.loggedInAs?._id == user?._id &&
-                        isEditProfile != "Username" &&
+                        isEditProfile != "Username" && isProcessing != "Username" &&
                         "[add username]"}
-                    <input
-                        type="text"
-                        className={`${
-                            isEditProfile != "Username" && "hidden"
-                        } border-b bg-transparent border-blue-200`}
-						value={username}
-						onChange={handleChangeUsername}
-                        placeholder="username"
-                    />
-                    {ctx?.loggedInAs?._id == user?._id && (
-                        <button
-                            className="inline px-2 text-gray-500"
-                            onClick={() => handleSetEditProfile("Username")}
-                        >
-                            {isEditProfile != "Username" &&
-                            ctx?.loggedInAs?._id == user?._id ? (
-                                <EditOutlinedIcon />
-                            ) : (
-                                <HighlightOffOutlinedIcon />
+                    {isProcessing === "Username" ? (
+                        <div className="w-[125px] h-[16px] bg-gray-300 animate-pulse inline-block">
+                            &nbsp;
+                        </div>
+                    ) : (
+                        <>
+                            <input
+                                type="text"
+                                className={`${
+                                    isEditProfile != "Username" && "hidden"
+                                } border-b bg-transparent border-blue-200 outline-none`}
+                                value={username}
+                                onChange={handleChangeUsername}
+                                onKeyDown={handleUpdateUsername}
+                                onBlur={handleInputBlur}
+                                placeholder="username"
+                            />
+                            {ctx?.loggedInAs?._id == user?._id && (
+                                <button
+                                    className="inline px-2 text-gray-500"
+                                    onClick={() =>
+                                        handleSetEditProfile("Username")
+                                    }
+                                >
+                                    {isEditProfile != "Username" &&
+                                    ctx?.loggedInAs?._id == user?._id ? (
+                                        <EditOutlinedIcon />
+                                    ) : (
+                                        <HighlightOffOutlinedIcon />
+                                    )}
+                                </button>
                             )}
-                        </button>
+                        </>
                     )}
                 </p>
-                <p className="text-sm">
-                    {user?.description}
+                <p className="text-sm flex items-center">
+                    {!isEditProfile && user?.description}
                     {!user?.description &&
                         ctx?.loggedInAs?._id == user?._id &&
-                        isEditProfile != "Description" &&
+                        isEditProfile != "Description" && isProcessing != "Description" &&
                         "[add description]"}
-                    <input
-                        type="text"
-                        className={`${
-                            isEditProfile != "Description" && "hidden"
-                        } border-b bg-transparent border-blue-200`}
-						value={description}
-						onChange={handleChangeDescription}
-                        placeholder="description"
-                    />
-                    {ctx?.loggedInAs?._id == user?._id && (
-                        <button
-                            className="inline px-2 text-gray-500"
-                            onClick={() => handleSetEditProfile("Description")}
-                        >
-                            {isEditProfile != "Description" ? (
-                                <EditOutlinedIcon />
-                            ) : (
-                                <HighlightOffOutlinedIcon />
+                    {isProcessing === "Description" ? (
+                        <div className="flex flex-col gap-1">
+                            <div className="w-[250px] h-[16px] bg-gray-300 animate-pulse inline-block">
+                                &nbsp;
+                            </div> 
+                            <div className="w-[175px] h-[16px] bg-gray-300 animate-pulse inline-block">
+                                &nbsp;
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            <textarea
+                                className={`${
+                                    isEditProfile != "Description" && "hidden"
+                                } border-b bg-transparent border-blue-200 outline-none w-full`}
+                                value={description}
+                                onChange={handleChangeDescription}
+                                onKeyDown={handleUpdateDescription}
+                                onBlur={handleInputBlur}
+                                placeholder="description"
+                            ></textarea>
+                            {ctx?.loggedInAs?._id == user?._id && (
+                                <button
+                                    className="inline px-2 text-gray-500"
+                                    onClick={() =>
+                                        handleSetEditProfile("Description")
+                                    }
+                                >
+                                    {isEditProfile != "Description" ? (
+                                        <EditOutlinedIcon />
+                                    ) : (
+                                        <HighlightOffOutlinedIcon />
+                                    )}
+                                </button>
                             )}
-                        </button>
+                        </>
                     )}
                 </p>
             </div>

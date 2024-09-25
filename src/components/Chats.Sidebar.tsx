@@ -85,7 +85,11 @@ const ChatProfiles = () => {
         return out[0];
     };
     const displayRecipientNameOrEmail = (recipients: User[] | undefined) => {
-        return recipients ? filterRecipient(recipients).email : "";
+        const recipient = filterRecipient(recipients ?? []);
+        return recipient.username ? recipient.username : recipient.email ?? "";
+    };
+    const displayRecipientAvatar = (recipients: User[] | undefined) => {
+        return recipients ? filterRecipient(recipients).avatar : "";
     };
 
     return (
@@ -105,7 +109,16 @@ const ChatProfiles = () => {
                         }`}
                         onClick={() => handleClickOpenChat(chat)}
                     >
-                        <ForumOutlinedIcon className="text-gray-400" />
+                        {chat.type === "dm" ? (
+                            <img
+                                src={displayRecipientAvatar(chat.dmRecipients)}
+                                width={32}
+                                height={32}
+                                className="rounded-full"
+                            />
+                        ) : (
+                            <ForumOutlinedIcon className="text-gray-400" />
+                        )}
                         <p>
                             {chat.name ??
                                 displayRecipientNameOrEmail(chat.dmRecipients)}

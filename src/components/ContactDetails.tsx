@@ -222,7 +222,7 @@ const ContactDetails = () => {
                             onClick={handleMessageUser}
                         >
                             <MailOutlineOutlinedIcon />
-                            &nbsp; Direct Message
+                            &nbsp; Message
                         </button>
                         <button
                             className="font-semibold text-red-600 hover:text-red-800"

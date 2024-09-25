@@ -108,7 +108,7 @@ const Messages = () => {
                             >
                                 {ctx?.loggedInAs?._id == msg.userId
                                     ? "You"
-                                    : msg.user.email}
+                                    : msg.user.username ?? msg.user.email}
                             </p>
                             <p className="text-sm py-1">{msg.text}</p>
                             <p className="text-xs text-gray-400">

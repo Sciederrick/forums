@@ -28,7 +28,7 @@ const ChatProfiles = () => {
 
     const handletoggleDirectMessages = () => {
         setIsDirectMessages((prev) => !prev);
-		ctx?.onSetActiveChat(undefined);
+        ctx?.onSetActiveChat(undefined);
     };
 
     const [isFirstRun, setIsFirstRun] = useState(true);
@@ -44,8 +44,8 @@ const ChatProfiles = () => {
     useEffect(() => {
         if (ctx?.activeChat?.type) {
             setIsDirectMessages(ctx.activeChat.type == "dm");
-        } 
-    }, [ctx?.activeChat])
+        }
+    }, [ctx?.activeChat]);
 
     useEffect(() => {
         fetchChats("group");

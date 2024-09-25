@@ -53,10 +53,11 @@ const ChatProfiles = () => {
             const loggedInUserId = ctx?.loggedInAs?._id;
             if (!loggedInUserId) return;
             if (
-                (newChat.type != "dm" && isDirectMessages) ||
-                (newChat.type == "group" && !isDirectMessages)
-            )
+                (newChat.type == "dm" && !isDirectMessages) ||
+                (newChat.type == "group" && isDirectMessages)
+            ) {
                 return; // only update if the updated category(DM or Group chat) is visible
+            }
             if (newChat.memberIds.indexOf(loggedInUserId) > -1) {
                 setChats((prevChats) => [...prevChats, newChat]);
             }

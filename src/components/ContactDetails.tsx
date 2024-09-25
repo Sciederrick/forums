@@ -17,6 +17,11 @@ const ContactDetails = () => {
     const handleMessageUser = () => {
         if (user) {
             messageUser(user);
+            // Dismiss the user details modal
+            ctx?.onSetUserDetailsUserId(null);
+        } else {
+            // The user is not set
+            ctx?.onNotif('Something went wrong')
         }
     };
     const handleUpdatedUser = (user: User) => {

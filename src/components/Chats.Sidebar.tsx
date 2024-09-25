@@ -86,7 +86,7 @@ const ChatProfiles = () => {
     };
     const displayRecipientNameOrEmail = (recipients: User[] | undefined) => {
         const recipient = filterRecipient(recipients ?? []);
-        return recipient.username ? recipient.username : recipient.email ?? "";
+        return typeof(recipient.username) == 'string' && recipient.username.trim().length > 0 ? recipient.username : recipient.email ?? "";
     };
     const displayRecipientAvatar = (recipients: User[] | undefined) => {
         return recipients ? filterRecipient(recipients).avatar : "";

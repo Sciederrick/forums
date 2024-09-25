@@ -67,10 +67,10 @@ const ContactDetails = () => {
     const handleChangeUsername = (e: any) => {
         setUsername(e.target.value);
     };
-    const [description, setDescription] = useState("");
+    const [bio, setBio] = useState("");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleChangeDescription = (e: any) => {
-        setDescription(e.target.value);
+        setBio(e.target.value);
     };
     type Process = "Username" | "Description";
     const [isProcessing, setIsProcessing] = useState<Process | null>(null);
@@ -99,7 +99,7 @@ const ContactDetails = () => {
                 setIsProcessing("Description");
                 await client
                     .service("users")
-                    .patch(ctx?.loggedInAs?._id, { description });
+                    .patch(ctx?.loggedInAs?._id, { bio });
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
@@ -124,7 +124,7 @@ const ContactDetails = () => {
                         className="rounded-full"
                     />
                 </div>
-                <p className="text-sm flex items-center">
+                <div className="text-sm flex items-center">
                     {user?.email}&nbsp;·&nbsp;
                     {!isEditProfile && user?.username}
                     {!user?.username &&
@@ -165,13 +165,13 @@ const ContactDetails = () => {
                             )}
                         </>
                     )}
-                </p>
-                <p className="text-sm flex items-center">
-                    {!isEditProfile && user?.description}
-                    {!user?.description &&
+                </div>
+                <div className="text-sm flex items-center">
+                    {!isEditProfile && user?.bio}
+                    {!user?.bio &&
                         ctx?.loggedInAs?._id == user?._id &&
                         isEditProfile != "Description" && isProcessing != "Description" &&
-                        "[add description]"}
+                        "[add bio]"}
                     {isProcessing === "Description" ? (
                         <div className="flex flex-col gap-1">
                             <div className="w-[250px] h-[16px] bg-gray-300 animate-pulse inline-block">
@@ -187,7 +187,7 @@ const ContactDetails = () => {
                                 className={`${
                                     isEditProfile != "Description" && "hidden"
                                 } border-b bg-transparent border-blue-200 outline-none w-full`}
-                                value={description}
+                                value={bio}
                                 onChange={handleChangeDescription}
                                 onKeyDown={handleUpdateDescription}
                                 onBlur={handleInputBlur}
@@ -209,7 +209,7 @@ const ContactDetails = () => {
                             )}
                         </>
                     )}
-                </p>
+                </div>
             </div>
             {ctx?.loggedInAs?._id != user?._id && (
                 <>

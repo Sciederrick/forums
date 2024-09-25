@@ -30,6 +30,12 @@ const ChatDetails = () => {
         ctx?.onToggleGroupDetails();
     };
 
+    const handleShowUserProfile = (id: string) => {
+        // Dismiss chat details
+        ctx?.onToggleGroupDetails();
+        ctx?.onSetUserDetailsUserId(id);
+    };
+
     return (
         <div className="lg:w-[540px]">
             <div className="w-full rounded px-3 py-4 flex flex-col gap-4 bg-gray-50">
@@ -61,11 +67,19 @@ const ChatDetails = () => {
                                 height={32}
                                 width={32}
                                 className="rounded-full"
+                                onClick={() => {
+                                    handleShowUserProfile(user._id);
+                                }}
                             />
                             {ctx?.loggedInAs?._id == user._id ? (
                                 <p>You</p>
                             ) : (
-                                <p>{typeof(user.username) == 'string' && user.username.trim().length > 0 ? user.username : user.email}</p>
+                                <p>
+                                    {typeof user.username == "string" &&
+                                    user.username.trim().length > 0
+                                        ? user.username
+                                        : user.email}
+                                </p>
                             )}
                         </div>
                         {ctx?.loggedInAs?._id != user._id && (

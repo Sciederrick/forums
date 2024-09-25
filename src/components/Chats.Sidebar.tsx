@@ -86,10 +86,20 @@ const ChatProfiles = () => {
     };
     const displayRecipientNameOrEmail = (recipients: User[] | undefined) => {
         const recipient = filterRecipient(recipients ?? []);
-        return typeof(recipient.username) == 'string' && recipient.username.trim().length > 0 ? recipient.username : recipient.email ?? "";
+        return typeof recipient.username == "string" &&
+            recipient.username.trim().length > 0
+            ? recipient.username
+            : recipient.email ?? "";
     };
     const displayRecipientAvatar = (recipients: User[] | undefined) => {
         return recipients ? filterRecipient(recipients).avatar : "";
+    };
+    const getRecipientUserId = (recipients: User[] | undefined) => {
+        return recipients ? filterRecipient(recipients)._id : "";
+    };
+
+    const handleShowUserProfile = (id: string) => {
+        ctx?.onSetUserDetailsUserId(id);
     };
 
     return (
@@ -115,6 +125,12 @@ const ChatProfiles = () => {
                                 width={32}
                                 height={32}
                                 className="rounded-full"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleShowUserProfile(
+                                        getRecipientUserId(chat.dmRecipients)
+                                    );
+                                }}
                             />
                         ) : (
                             <ForumOutlinedIcon className="text-gray-400" />

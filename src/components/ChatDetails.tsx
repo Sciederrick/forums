@@ -65,7 +65,7 @@ const ChatDetails = () => {
                             {ctx?.loggedInAs?._id == user._id ? (
                                 <p>You</p>
                             ) : (
-                                <p>{user.email}</p>
+                                <p>{typeof(user.username) == 'string' && user.username.trim().length > 0 ? user.username : user.email}</p>
                             )}
                         </div>
                         {ctx?.loggedInAs?._id != user._id && (

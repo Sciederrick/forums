@@ -124,7 +124,7 @@ const Messages = () => {
                     type="text"
                     name="msg-input"
                     id="msg-input"
-                    className="border w-full px-2"
+                    className="border w-full px-2 outline-none"
                     value={inputMsg}
                     onChange={handleMsgInput}
                     onKeyDown={handleKeyDown}

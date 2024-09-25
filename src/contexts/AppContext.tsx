@@ -11,8 +11,8 @@ export type TypeAppContext = {
     onSetLoggedInUser: (user: User) => void;
     activeChat: Chat | undefined;
     onSetActiveChat: (chat: Chat | undefined) => void;
-    showGroupDetails: boolean;
-    onToggleGroupDetails: () => void;
+    showChatDetails: boolean;
+    onToggleChatDetails: () => void;
     userDetailsUserId: string | null;
     onSetUserDetailsUserId: (id: string | null) => void;
     activeSidebarComponent: ActiveSidebarComponent;
@@ -74,8 +74,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                 onSetLoggedInUser: handleSetLoggedInUser,
                 activeChat,
                 onSetActiveChat: handleSetActiveChat,
-                showGroupDetails,
-                onToggleGroupDetails: handleToggleGroupDetails,
+                showChatDetails: showGroupDetails,
+                onToggleChatDetails: handleToggleGroupDetails,
                 activeSidebarComponent,
                 onSetActiveSidebarComponent: handleSetActiveSidebarComponent,
                 userDetailsUserId,

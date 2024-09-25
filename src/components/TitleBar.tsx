@@ -7,7 +7,7 @@ const TitleBar = () => {
     const ctx = useContext(AppContext);
 
     const handleClickChatDetails = () => {
-        ctx?.onToggleGroupDetails();
+        ctx?.onToggleChatDetails();
     };
 
     return (

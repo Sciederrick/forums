@@ -14,7 +14,7 @@ const App = () => {
     const ctx = useContext(AppContext);
 
     const handleCloseGroupInfoDialog = () => {
-        ctx?.onToggleGroupDetails();
+        ctx?.onToggleChatDetails();
     };
 
     const handleCloseContactInfoDialog = () => {
@@ -45,7 +45,7 @@ const App = () => {
                                     : "Chat Info"
                             }
                             component={<ChatDetails />}
-                            isOpen={ctx?.showGroupDetails ?? false}
+                            isOpen={ctx?.showChatDetails ?? false}
                             onHandleClose={handleCloseGroupInfoDialog}
                         />
                     )}

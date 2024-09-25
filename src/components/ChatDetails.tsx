@@ -27,12 +27,12 @@ const ChatDetails = () => {
     const { messageUser } = useMessageUser(ctx);
     const handleMessageUser = (user: User) => {
         messageUser(user);
-        ctx?.onToggleGroupDetails();
+        ctx?.onToggleChatDetails();
     };
 
     const handleShowUserProfile = (id: string) => {
         // Dismiss chat details
-        ctx?.onToggleGroupDetails();
+        ctx?.onToggleChatDetails();
         ctx?.onSetUserDetailsUserId(id);
     };
 

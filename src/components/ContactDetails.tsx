@@ -21,34 +21,12 @@ const ContactDetails = () => {
             ctx?.onSetUserDetailsUserId(null);
         } else {
             // The user is not set
-            ctx?.onNotif('Something went wrong')
+            ctx?.onNotif("Something went wrong");
         }
     };
     const handleUpdatedUser = (user: User) => {
         setUser(user);
     };
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                if (!ctx?.userDetailsUserId) return;
-                const profile = await client
-                    .service("users")
-                    .find({ query: { _id: ctx?.userDetailsUserId } });
-                setUser(profile.data[0]);
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } catch (err: any) {
-                ctx?.onNotif(`Fetching user failed with err: ${err}`);
-            }
-        };
-        fetchUsers();
-
-        // Track user profile updates
-        client.service("users").on("patched", handleUpdatedUser);
-
-        return () => {
-            client.service("users").off(handleUpdatedUser);
-        }
-    }, [ctx?.userDetailsUserId]);
 
     // Edit Mode For the Current User's Profile
     // Allows the current user to edit their username & description
@@ -113,10 +91,35 @@ const ContactDetails = () => {
         setIsEditProfile(null);
     };
 
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                if (!ctx?.userDetailsUserId) return;
+                const profile = await client
+                    .service("users")
+                    .find({ query: { _id: ctx?.userDetailsUserId } });
+                setUser(profile.data[0]);
+                if (user?.username) setUsername(user.username);
+                if (user?.bio) setBio(user.bio);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (err: any) {
+                ctx?.onNotif(`Fetching user failed with err: ${err}`);
+            }
+        };
+        fetchUsers();
+
+        // Track user profile updates
+        client.service("users").on("patched", handleUpdatedUser);
+
+        return () => {
+            client.service("users").off(handleUpdatedUser);
+        };
+    }, [ctx?.userDetailsUserId]);
+
     return (
-        <div className="lg:w-[540px]">
-            <div className="relative w-full rounded px-3 py-4 flex flex-col gap-4 bg-gray-50 mt-8 pt-10">
-                <div className="absolute -top-8 z-10 bg-white rounded-full">
+        <div className="w-full">
+            <div className={`relative rounded-t-3xl px-3 py-4 flex flex-col gap-4 bg-gray-50 mt-8 pt-10 px-8 w-full ${ctx?.loggedInAs?._id != user?._id ? 'min-h-[200px]' : 'min-h-[400px]'}`}>
+                <div className="absolute -top-8 left-[48vw] z-10 bg-gray-50 rounded-full">
                     <img
                         src={user?.avatar}
                         width={64}
@@ -124,12 +127,13 @@ const ContactDetails = () => {
                         className="rounded-full"
                     />
                 </div>
-                <div className="text-sm flex items-center">
+                <div className="text-sm flex items-center justify-center text-center font-bold">
                     {user?.email}&nbsp;·&nbsp;
                     {!isEditProfile && user?.username}
                     {!user?.username &&
                         ctx?.loggedInAs?._id == user?._id &&
-                        isEditProfile != "Username" && isProcessing != "Username" &&
+                        isEditProfile != "Username" &&
+                        isProcessing != "Username" &&
                         "[add username]"}
                     {isProcessing === "Username" ? (
                         <div className="w-[125px] h-[16px] bg-gray-300 animate-pulse inline-block">
@@ -166,17 +170,18 @@ const ContactDetails = () => {
                         </>
                     )}
                 </div>
-                <div className="text-sm flex items-center">
-                    {!isEditProfile && user?.bio}
+                <div className="text-sm flex items-center justify-center text-center w-full max-w-xl mx-auto">
+                    {isEditProfile != "Description" && user?.bio}
                     {!user?.bio &&
                         ctx?.loggedInAs?._id == user?._id &&
-                        isEditProfile != "Description" && isProcessing != "Description" &&
+                        isEditProfile != "Description" &&
+                        isProcessing != "Description" &&
                         "[add bio]"}
                     {isProcessing === "Description" ? (
                         <div className="flex flex-col gap-1">
                             <div className="w-[250px] h-[16px] bg-gray-300 animate-pulse inline-block">
                                 &nbsp;
-                            </div> 
+                            </div>
                             <div className="w-[175px] h-[16px] bg-gray-300 animate-pulse inline-block">
                                 &nbsp;
                             </div>
@@ -186,7 +191,7 @@ const ContactDetails = () => {
                             <textarea
                                 className={`${
                                     isEditProfile != "Description" && "hidden"
-                                } border-b bg-transparent border-blue-200 outline-none w-full`}
+                                } border-b bg-transparent border-blue-200 outline-none w-full max-w-xl mx-auto text-center`}
                                 value={bio}
                                 onChange={handleChangeDescription}
                                 onKeyDown={handleUpdateDescription}
@@ -212,20 +217,20 @@ const ContactDetails = () => {
                 </div>
             </div>
             {ctx?.loggedInAs?._id != user?._id && (
-                <>
-                    <div className="mx-auto h-[2px] my-8 bg-gray-100 w-full">
+                <div className="bg-gray-50">
+                    <div className="mx-auto h-[2px] bg-gray-100 w-full max-w-3xl">
                         &nbsp;
                     </div>
-                    <div className="flex flex-col items-start gap-6">
+                    <div className="flex flex-col items-start gap-6 w-full max-w-3xl mx-auto py-16">
                         <button
-                            className="font-semibold"
+                            className="mx-auto font-semibold"
                             onClick={handleMessageUser}
                         >
                             <MailOutlineOutlinedIcon />
                             &nbsp; Message
                         </button>
                         <button
-                            className="font-semibold text-red-600 hover:text-red-800"
+                            className="mx-auto font-semibold text-red-600 hover:text-red-800"
                             title="coming soon"
                             disabled
                         >
@@ -233,7 +238,7 @@ const ContactDetails = () => {
                             &nbsp; Block
                         </button>
                         <button
-                            className="font-semibold text-red-600 hover:text-red-800"
+                            className="mx-auto font-semibold text-red-600 hover:text-red-800"
                             title="coming soon"
                             disabled
                         >
@@ -241,7 +246,7 @@ const ContactDetails = () => {
                             &nbsp; Report
                         </button>
                     </div>
-                </>
+                </div>
             )}
         </div>
     );

@@ -37,8 +37,8 @@ const ChatDetails = () => {
     };
 
     return (
-        <div className="lg:w-[540px]">
-            <div className="w-full rounded px-3 py-4 flex flex-col gap-4 bg-gray-50">
+        <div className="w-full h-[75vh] bg-white rounded-t-3xl">
+            <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 bg-gray-50 max-w-3xl mx-auto text-center">
                 <p className="text-xs text-gray-400">
                     Created:{" "}
                     {formatChatTimestamp(ctx?.activeChat?.createdAt ?? 0)}
@@ -52,10 +52,10 @@ const ChatDetails = () => {
                     {ctx?.activeChat?.memberIds.length}&nbsp;members
                 </p>
             </div>
-            <div className="mx-auto h-[2px] my-8 bg-gray-100 w-full">
+            <div className="mx-auto h-[2px] my-8 bg-gray-100 w-full max-w-3xl">
                 &nbsp;
             </div>
-            <ul className="mx-auto w-full max-h-[50vh] overflow-y-auto">
+            <ul className="mx-auto w-full max-h-[50vh] overflow-y-auto max-w-3xl">
                 {users.map((user: User) => (
                     <li
                         key={user._id}

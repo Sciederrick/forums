@@ -39,6 +39,7 @@ const ChatDetails = () => {
     return (
         <div className="w-full h-[75vh] bg-white rounded-t-3xl">
             <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 bg-gray-50 max-w-3xl mx-auto text-center">
+                <h2 className="text-2xl">{ctx?.activeChat?.name}</h2>
                 <p className="text-xs text-gray-400">
                     Created:{" "}
                     {formatChatTimestamp(ctx?.activeChat?.createdAt ?? 0)}

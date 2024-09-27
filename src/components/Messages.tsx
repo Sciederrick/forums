@@ -49,7 +49,7 @@ const Messages = () => {
 
         // Cleanup event listener on component unmount or when activeChatId changes
         return () => {
-            client.service("messages").off("created", handleNewMessage);
+            client.service("messages").removeListener("created");
         };
     }, [ctx?.activeChat]);
 

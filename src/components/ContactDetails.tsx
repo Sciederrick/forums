@@ -112,7 +112,7 @@ const ContactDetails = () => {
         client.service("users").on("patched", handleUpdatedUser);
 
         return () => {
-            client.service("users").off(handleUpdatedUser);
+            client.service("users").removeListener("patched");
         };
     }, [ctx?.userDetailsUserId]);
 

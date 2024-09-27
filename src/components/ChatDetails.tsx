@@ -1,10 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { formatChatTimestamp } from "../utils";
 import { AppContext } from "../contexts/AppContext";
-import { User } from "../types";
+import { Chat, User } from "../types";
 import client from "../lib/feathersClient";
 
 import useMessageUser from "../hooks/useMessageUser";
+
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 
 const ChatDetails = () => {
     const ctx = useContext(AppContext);
@@ -36,18 +39,164 @@ const ChatDetails = () => {
         ctx?.onSetUserDetailsUserId(id);
     };
 
+    type Edit = "Name" | "Description" | "Members";
+    type Process = Edit;
+    const [isProcessing, setIsProcessing] = useState<Process | null>(null);
+    const [isEditChat, setIsEditChat] = useState<Edit | null>(null);
+    const [name, setName] = useState<string | null>(
+        ctx?.activeChat?.name ?? null
+    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleChangeName = (e: any) => {
+        setName(e.target.value);
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleUpdateName = async (e: any) => {
+        try {
+            if (!ctx?.activeChat?._id) throw Error("chat id empty");
+            if (!name || name.trim().length == 0) throw Error("invalid name");
+            if (e.key === "Enter") {
+                e.currentTarget.blur();
+                setIsProcessing("Name");
+                await client
+                    .service("chats")
+                    .patch(ctx.activeChat._id, { name });
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            ctx?.onNotif(`Updating name failed with error: ${err}`);
+        } finally {
+            setIsProcessing(null);
+        }
+    };
+
+    const [description, setDescription] = useState<string | null>(
+        ctx?.activeChat?.description ?? null
+    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleChangeDescription = (e: any) => {
+        setDescription(e.target.value);
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleUpdateDescription = async (e: any) => {
+        try {
+            if (!ctx?.activeChat?._id) throw Error("chat id empty");
+            if (!description || description.trim().length == 0) throw Error("invalid description");
+            if (e.key === "Enter") {
+                e.currentTarget.blur();
+                setIsProcessing("Description");
+                await client
+                    .service("chats")
+                    .patch(ctx.activeChat._id, { description });
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            ctx?.onNotif(`Updating description failed with error: ${err}`);
+        } finally {
+            setIsProcessing(null);
+        }
+    };
+
+    // Switch of edit mode on input blur
+    const handleInputBlur = () => {
+        setIsEditChat(null);
+    };
+    const handleEditChat = (section: Edit | null) => {
+        setIsEditChat(section);
+    };
+
+    useEffect(() => {
+        client.service("chats").on("patched", (chat: Chat) => {
+            ctx?.onSetActiveChat(chat);
+        });
+        return () => {
+            client.service("chats").removeListener("patched");
+        };
+    }, []);
+
     return (
         <div className="w-full h-[75vh] bg-white rounded-t-3xl">
             <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 bg-gray-50 max-w-3xl mx-auto text-center">
-                <h2 className="text-2xl">{ctx?.activeChat?.name}</h2>
+                {isProcessing === "Name" ? (
+                    <div className="w-[125px] h-[16px] bg-gray-300 animate-pulse inline-block">
+                        &nbsp;
+                    </div>
+                ) : (
+                    <>
+                        {isEditChat == "Name" &&
+                        ctx?.activeChat?.type === "group" ? (
+                            <div className="flex max-w-md mx-auto ">
+                                <input
+                                    type="text"
+                                    className="border-b bg-transparent border-blue-200 outline-none"
+                                    value={name ?? ""}
+                                    onChange={handleChangeName}
+                                    onKeyDown={handleUpdateName}
+                                    onBlur={handleInputBlur}
+                                    placeholder="username"
+                                />
+                                <button
+                                    className="px-2 text-gray-500"
+                                    onClick={() => handleEditChat(null)}
+                                >
+                                    <HighlightOffOutlinedIcon className="text-gray-400" />
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex gap-2 justify-center">
+                                <h2 className="text-2xl">
+                                    {ctx?.activeChat?.name}
+                                </h2>
+                                <button
+                                    className="px-2 text-gray-500"
+                                    onClick={() => handleEditChat("Name")}
+                                >
+                                    <EditOutlinedIcon />
+                                </button>
+                            </div>
+                        )}
+                    </>
+                )}
                 <p className="text-xs text-gray-400">
                     Created:{" "}
                     {formatChatTimestamp(ctx?.activeChat?.createdAt ?? 0)}
                 </p>
-                {ctx?.activeChat?.description ? (
-                    <p>{ctx?.activeChat?.description}</p>
+                {isProcessing === "Description" &&
+                ctx?.activeChat?.type === "group" ? (
+                    <div className="w-[125px] h-[16px] bg-gray-300 animate-pulse inline-block">
+                        &nbsp;
+                    </div>
                 ) : (
-                    <p className="text-gray-400">(empty description)</p>
+                    <div className="flex gap-2 justify-center">
+                        {isEditChat === "Description" ? (
+                            <textarea
+                                className="border-b bg-transparent border-blue-200 outline-none w-full max-w-xl mx-auto text-center"
+                                value={description ?? ""}
+                                onChange={handleChangeDescription}
+                                onKeyDown={handleUpdateDescription}
+                                onBlur={handleInputBlur}
+                                placeholder="description"
+                            ></textarea>
+                        ) : (
+                            <>
+                                {ctx?.activeChat?.description ? (
+                                    <p>{ctx?.activeChat?.description}</p>
+                                ) : (
+                                    <p className="text-gray-400">
+                                        (empty description)
+                                    </p>
+                                )}
+                                <button
+                                    className="px-2 text-gray-500"
+                                    onClick={() =>
+                                        handleEditChat("Description")
+                                    }
+                                >
+                                    <EditOutlinedIcon />
+                                </button>
+                            </>
+                        )}
+                    </div>
                 )}
                 <p className="text-sm">
                     {ctx?.activeChat?.memberIds.length}&nbsp;members

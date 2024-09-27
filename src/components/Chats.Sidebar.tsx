@@ -64,9 +64,17 @@ const ChatProfiles = () => {
         };
 
         client.service("chats").on("created", handleNewChat);
+        client.service("chats").on("patched", (updatedChat: Chat) => {
+            // Update chats
+            const updatedChats = chats.map((chat) => {
+                return chat._id === updatedChat._id ? updatedChat : chat;
+            });
+            setChats(updatedChats);
+        });
 
         return () => {
-            client.service("chats").off(handleNewChat);
+            client.service("chats").removeListener("created");
+            client.service("chats").removeListener("patched");
         };
     }, []);
 

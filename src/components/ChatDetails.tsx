@@ -116,7 +116,7 @@ const ChatDetails = () => {
 
     return (
         <div className="w-full h-[75vh] bg-white rounded-t-3xl">
-            <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 bg-gray-50 max-w-3xl mx-auto text-center">
+            <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 max-w-3xl mx-auto text-center lg:bg-gray-50">
                 {isProcessing === "Name" ? (
                     <div className="w-[125px] h-[16px] bg-gray-300 animate-pulse inline-block">
                         &nbsp;
@@ -125,10 +125,10 @@ const ChatDetails = () => {
                     <>
                         {isEditChat == "Name" &&
                         ctx?.activeChat?.type === "group" ? (
-                            <div className="flex max-w-md mx-auto ">
+                            <div className="flex max-w-md mx-auto relative">
                                 <input
                                     type="text"
-                                    className="border-b bg-transparent border-blue-200 outline-none"
+                                    className="border-b bg-transparent border-blue-200 outline-none text-center"
                                     value={name ?? ""}
                                     onChange={handleChangeName}
                                     onKeyDown={handleUpdateName}
@@ -136,22 +136,25 @@ const ChatDetails = () => {
                                     placeholder="username"
                                 />
                                 <button
-                                    className="px-2 text-gray-500"
+                                    className="px-2 text-gray-500 absolute -right-8 inset-y-0"
                                     onClick={() => handleEditChat(null)}
                                 >
                                     <HighlightOffOutlinedIcon className="text-gray-400" />
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex gap-2 justify-center">
-                                <h2 className="text-2xl">
+                            <div className="flex gap-2 justify-center mx-auto relative">
+                                <h2
+                                    className="text-2xl"
+                                    onClick={() => handleEditChat("Name")}
+                                >
                                     {ctx?.activeChat?.name}
                                 </h2>
                                 <button
-                                    className="px-2 text-gray-500"
+                                    className="px-2 text-gray-500 absolute -right-8"
                                     onClick={() => handleEditChat("Name")}
                                 >
-                                    <EditOutlinedIcon />
+                                    <EditOutlinedIcon fontSize="small" />
                                 </button>
                             </div>
                         )}
@@ -169,32 +172,51 @@ const ChatDetails = () => {
                 ) : (
                     <div className="flex gap-2 justify-center">
                         {isEditChat === "Description" ? (
-                            <textarea
-                                className="border-b bg-transparent border-blue-200 outline-none w-full max-w-xl mx-auto text-center"
-                                value={description ?? ""}
-                                onChange={handleChangeDescription}
-                                onKeyDown={handleUpdateDescription}
-                                onBlur={handleInputBlur}
-                                placeholder="description"
-                            ></textarea>
+                            <div className="w-full relative max-w-xl">
+                                <textarea
+                                    className="border-b bg-transparent border-blue-200 outline-none w-full max-w-xl mx-auto text-center px-6"
+                                    value={description ?? ""}
+                                    onChange={handleChangeDescription}
+                                    onKeyDown={handleUpdateDescription}
+                                    onBlur={handleInputBlur}
+                                    placeholder="description"
+                                ></textarea>
+                                <button
+                                    className="px-2 text-gray-500 absolute -right-2 inset-y-0"
+                                    onClick={() => handleEditChat(null)}
+                                >
+                                    <HighlightOffOutlinedIcon className="text-gray-400" />
+                                </button>
+                            </div>
                         ) : (
-                            <>
+                            <div className="relative">
                                 {ctx?.activeChat?.description ? (
-                                    <p>{ctx?.activeChat?.description}</p>
+                                    <p
+                                        onClick={() =>
+                                            handleEditChat("Description")
+                                        }
+                                    >
+                                        {ctx?.activeChat?.description}
+                                    </p>
                                 ) : (
-                                    <p className="text-gray-400">
+                                    <p
+                                        className="text-gray-400"
+                                        onClick={() =>
+                                            handleEditChat("Description")
+                                        }
+                                    >
                                         (empty description)
                                     </p>
                                 )}
                                 <button
-                                    className="px-2 text-gray-500"
+                                    className="px-2 text-gray-500 absolute -right-2 -top-4 md:top-0 md:-right-8"
                                     onClick={() =>
                                         handleEditChat("Description")
                                     }
                                 >
-                                    <EditOutlinedIcon />
+                                    <EditOutlinedIcon fontSize="small" />
                                 </button>
-                            </>
+                            </div>
                         )}
                     </div>
                 )}

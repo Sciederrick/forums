@@ -8,6 +8,9 @@ import useMessageUser from "../hooks/useMessageUser";
 
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
+import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
+import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 
 const ChatDetails = () => {
     const ctx = useContext(AppContext);
@@ -105,6 +108,17 @@ const ChatDetails = () => {
         setIsEditChat(section);
     };
 
+    // Add members to the group/forum
+    const handleAddMembers = () => {
+        // @TODO: Add Members
+		if (searchMode == "ForumUserSearch") { // Default
+			handleUpdateSearchMode("GlobalUserSearch");
+		} else {
+			// Reset to default
+			handleUpdateSearchMode("ForumUserSearch")
+		}
+    };
+
     useEffect(() => {
         client.service("chats").on("patched", (chat: Chat) => {
             ctx?.onSetActiveChat(chat);
@@ -113,6 +127,12 @@ const ChatDetails = () => {
             client.service("chats").removeListener("patched");
         };
     }, []);
+
+    type SearchMode = "ForumUserSearch"|"GlobalUserSearch";
+    const [searchMode, setSearchMode] = useState<"ForumUserSearch"|"GlobalUserSearch">("ForumUserSearch");
+    const handleUpdateSearchMode = (searchMode: SearchMode) => {
+        setSearchMode(searchMode);
+    };
 
     return (
         <div className="w-full h-[75vh] bg-white rounded-t-3xl">
@@ -224,16 +244,50 @@ const ChatDetails = () => {
                     {ctx?.activeChat?.memberIds.length}&nbsp;members
                 </p>
             </div>
-            <div className="mx-auto h-[2px] my-8 bg-gray-100 w-full max-w-3xl">
-                &nbsp;
+            <div className="mx-auto w-full max-w-3xl my-8 py-2 border-gray-500 border-b flex justify-between">
+                <input
+                    type="text"
+                    className="bg-transparent outline-none"
+                    placeholder={`${
+                        searchMode == "ForumUserSearch"
+                            ? "search forum users"
+                            : "search all users (add members)"
+                    }`}
+                />
+                <button>
+                    {searchMode == "ForumUserSearch" && (
+                        <PersonSearchOutlinedIcon />
+                    )}
+                    {searchMode == "GlobalUserSearch" && (
+                        <GroupAddOutlinedIcon />
+                    )}
+                </button>
             </div>
             <ul className="mx-auto w-full max-h-[50vh] overflow-y-auto max-w-3xl">
+                <li className="border border-gray-200  mb-2">
+                    <button
+                        className={`flex items-center gap-8 h-10 p-2 w-full font-bold hover:bg-indigo-50 ${searchMode == 'GlobalUserSearch' && "bg-indigo-100"}`}
+                        onClick={handleAddMembers}
+                    >
+                        <GroupAddOutlinedIcon className="m-1 text-indigo-600" />
+                        Add members
+                    </button>
+                </li>
+                <li className="border border-gray-200  mb-2">
+                    <button
+                        className="flex items-center gap-8 h-10 p-2 w-full font-bold  hover:bg-indigo-50"
+                        onClick={handleAddMembers}
+                    >
+                        <LinkOutlinedIcon className="m-1 text-indigo-600" />
+                        Invite link
+                    </button>
+                </li>
                 {users.map((user: User) => (
                     <li
                         key={user._id}
-                        className="flex items-center justify-between p-2 text-sm my-2 bg-gray-50 rounded cursor-pointer"
+                        className="flex items-center justify-between p-2 text-sm my-2 bg-gray-50 rounded hover:bg-indigo-50"
                     >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-8">
                             <img
                                 src={user.avatar}
                                 height={32}

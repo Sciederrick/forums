@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { formatChatTimestamp } from "../utils";
 import { AppContext } from "../contexts/AppContext";
 import { Chat, User } from "../types";
@@ -133,6 +133,20 @@ const ChatDetails = () => {
     const handleUpdateSearchMode = (searchMode: SearchMode) => {
         setSearchMode(searchMode);
     };
+	const [searchQuery, setSearchQuery] = useState("");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleChangeSearchQuery = (e:any) => {
+		setSearchQuery(e.target.value);
+    }
+	const filteredUsers = useMemo(() => {
+        return users.filter((user) => {
+			if (user.username != undefined) {
+				return user.username?.toLowerCase().includes(searchQuery.toLowerCase());
+			} else {
+				return user.email?.toLowerCase().includes(searchQuery.toLowerCase());
+			}
+        });
+    }, [users, searchQuery]);
 
     return (
         <div className="w-full h-[75vh] bg-white rounded-t-3xl">
@@ -247,6 +261,8 @@ const ChatDetails = () => {
             <div className="mx-auto w-full max-w-3xl my-8 py-2 border-gray-500 border-b flex justify-between">
                 <input
                     type="text"
+					value={searchQuery}
+                    onChange={handleChangeSearchQuery}
                     className="bg-transparent outline-none"
                     placeholder={`${
                         searchMode == "ForumUserSearch"
@@ -282,7 +298,7 @@ const ChatDetails = () => {
                         Invite link
                     </button>
                 </li>
-                {users.map((user: User) => (
+                {filteredUsers.map((user: User) => (
                     <li
                         key={user._id}
                         className="flex items-center justify-between p-2 text-sm my-2 bg-gray-50 rounded hover:bg-indigo-50"

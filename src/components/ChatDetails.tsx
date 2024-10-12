@@ -188,7 +188,6 @@ const ChatDetails = () => {
 				},
 			});
 			setUsers(response.data);
-			console.log(`global: ${users}`);
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			ctx?.onNotif(`failed to search users with err: ${err}`);

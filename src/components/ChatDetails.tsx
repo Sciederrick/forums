@@ -265,7 +265,7 @@ const ChatDetails = () => {
                     type="text"
 					value={searchQuery}
                     onChange={handleChangeSearchQuery}
-                    className="bg-transparent outline-none"
+                    className="bg-transparent outline-none w-full"
                     placeholder={`${
                         searchMode == "ForumUserSearch"
                             ? "search forum users"

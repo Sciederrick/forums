@@ -84,7 +84,8 @@ const ChatDetails = () => {
     const handleUpdateDescription = async (e: any) => {
         try {
             if (!ctx?.activeChat?._id) throw Error("chat id empty");
-            if (!description || description.trim().length == 0) throw Error("invalid description");
+            if (!description || description.trim().length == 0)
+                throw Error("invalid description");
             if (e.key === "Enter") {
                 e.currentTarget.blur();
                 setIsProcessing("Description");
@@ -150,7 +151,7 @@ const ChatDetails = () => {
     }, [users, searchQuery]);
 
     return (
-        <div className="w-full h-[75vh] bg-white rounded-t-3xl">
+        <div className="w-full h-[75vh] bg-white rounded-t-3xl px-4">
             <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 max-w-3xl mx-auto text-center lg:bg-gray-50">
                 {isProcessing === "Name" ? (
                     <div className="w-[125px] h-[16px] bg-gray-300 animate-pulse inline-block">

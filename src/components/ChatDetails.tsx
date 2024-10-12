@@ -116,8 +116,7 @@ const ChatDetails = () => {
     };
 
     // Add members to the group/forum
-    const handleToggleSearchMode = async () => {
-        // @TODO: Add Members
+    const handleToggleSearchMode = async () => {        
         if (searchMode == "ForumUserSearch") {
             // Default
             handleUpdateSearchMode("GlobalUserSearch"); 
@@ -128,6 +127,37 @@ const ChatDetails = () => {
 			fetchUsers();
         }
     };
+	const [newMemberIds, setNewMemberIds] = useState<string[]>([]);
+	const handleUpdateNewMemberIds = (newMemberId: string) => {
+		const foundMember = newMemberIds.find((memberId) => {
+			return memberId == newMemberId
+		});
+		if (foundMember) {
+			// If the member id already exists then remove from new member ids
+			const filteredMemberIds = newMemberIds.filter((memberId) => {
+                return memberId != newMemberId;
+            });
+			setNewMemberIds(filteredMemberIds);
+		} else {
+			// Add to the new members list
+			setNewMemberIds((prev) => [...prev, newMemberId]);
+		}
+	}
+	const handleAddNewMembers = async () => {
+		// Add Members/Update chat
+		try {
+			await client
+                .service("chats")
+                .patch(ctx?.activeChat?._id, {
+                    $push: { memberIds: { $each: newMemberIds } },
+                });
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch(err:any) {
+			ctx?.onNotif(`Updating name failed with error: ${err}`);
+		} finally {
+			ctx?.onNotif(`New members added successfully.`)
+		}
+	};
 
     useEffect(() => {
         client.service("chats").on("patched", (chat: Chat) => {
@@ -200,7 +230,7 @@ const ChatDetails = () => {
 	}, [searchQuery]);
 
     return (
-        <div className="w-full h-[75vh] bg-white rounded-t-3xl px-4">
+        <div className="w-full min-h-[75vh] bg-white rounded-t-3xl px-4">
             <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 max-w-3xl mx-auto text-center lg:bg-gray-50">
                 {isProcessing === "Name" ? (
                     <div className="w-[125px] h-[16px] bg-gray-300 animate-pulse inline-block">
@@ -330,7 +360,7 @@ const ChatDetails = () => {
                     )}
                 </button>
             </div>
-            <ul className="mx-auto w-full max-h-[50vh] overflow-y-auto max-w-3xl">
+            <ul className="mx-auto w-full max-h-[50vh] overflow-y-auto max-w-3xl h-[50vh]">
                 <li className="border border-gray-200  mb-2">
                     <button
                         className={`flex items-center gap-8 h-10 p-2 w-full font-bold hover:bg-indigo-50 ${
@@ -354,33 +384,67 @@ const ChatDetails = () => {
                 {filteredUsers ? (
                     <>
                         {filteredUsers.map((user: User) => (
-							<li key={user._id}>
-								<UserListItem
-									user={user}
-									loggedInUserId={ctx?.loggedInAs?._id}
-									onShowUserProfile={() =>
-										handleShowUserProfile(user._id)
-									}
-									onMessageUser={() => handleMessageUser(user)}
-								/>
-							</li>
+                            <li key={user._id}>
+                                <UserListItem
+                                    user={user}
+                                    loggedInUserId={ctx?.loggedInAs?._id}
+                                    onShowUserProfile={() =>
+                                        handleShowUserProfile(user._id)
+                                    }
+                                    onMessageUser={() =>
+                                        handleMessageUser(user)
+                                    }
+                                />
+                            </li>
                         ))}
                     </>
                 ) : (
                     <>
                         {/**Applies when the user does a global search for new members */}
                         {users.map((user: User) => (
-							<li key={user._id}>
-								<UserListItem
-									user={user}
-									loggedInUserId={ctx?.loggedInAs?._id}
-									onShowUserProfile={() =>
-										handleShowUserProfile(user._id)
-									}
-									onMessageUser={() => handleMessageUser(user)}
-								/>
-							</li>
+                            <li
+                                key={user._id}
+                                onClick={() =>
+                                    handleUpdateNewMemberIds(user._id)
+                                }
+                            >
+                                <UserListItem
+                                    user={user}
+                                    loggedInUserId={ctx?.loggedInAs?._id}
+                                    onShowUserProfile={() =>
+                                        handleShowUserProfile(user._id)
+                                    }
+                                    onMessageUser={() =>
+                                        handleMessageUser(user)
+                                    }
+                                    isSelected={
+                                        newMemberIds.indexOf(user._id) > -1
+                                            ? true
+                                            : false
+                                    }
+                                />
+                            </li>
                         ))}
+                        {searchMode && (
+                            <div className="flex justify-end gap-2 py-2">
+                                <button
+                                    className="py-1 px-3 border border-indigo-500 text-indigo-600 font-bold rounded-sm hover:bg-indigo-100"
+                                    onClick={() =>
+                                        handleUpdateSearchMode(
+                                            "ForumUserSearch"
+                                        )
+                                    }
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="py-1 px-3 bg-indigo-500 text-white font-bold rounded-sm hover:bg-indigo-700"
+                                    onClick={handleAddNewMembers}
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
             </ul>

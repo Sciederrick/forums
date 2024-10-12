@@ -121,7 +121,7 @@ const ChatDetails = () => {
         if (searchMode == "ForumUserSearch") {
             // Default
             handleUpdateSearchMode("GlobalUserSearch"); 
-
+			if (searchQuery != '') searchUsersGlobally(searchQuery);
         } else {
             // Reset to default
             handleUpdateSearchMode("ForumUserSearch");

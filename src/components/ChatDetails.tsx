@@ -128,6 +128,7 @@ const ChatDetails = () => {
         };
     }, []);
 
+	// Search Forum Users
     type SearchMode = "ForumUserSearch"|"GlobalUserSearch";
     const [searchMode, setSearchMode] = useState<"ForumUserSearch"|"GlobalUserSearch">("ForumUserSearch");
     const handleUpdateSearchMode = (searchMode: SearchMode) => {

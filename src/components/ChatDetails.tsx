@@ -11,23 +11,29 @@ import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
+import { debounce } from "lodash";
+
+import UserListItem from "./ChatDetails.UserListItem";
 
 const ChatDetails = () => {
     const ctx = useContext(AppContext);
     const [users, setUsers] = useState<User[]>([]);
+	const fetchUsers = async () => {
+		try {
+			const profiles = await client.service("users").find({
+				query: { _id: { $in: ctx?.activeChat?.memberIds } },
+			});
+			setUsers(profiles.data);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (err: any) {
+			ctx?.onNotif(`Fetching users failed with err: ${err}`);
+		}
+	};
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const profiles = await client.service("users").find({
-                    query: { _id: { $in: ctx?.activeChat?.memberIds } },
-                });
-                setUsers(profiles.data);
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } catch (err: any) {
-                ctx?.onNotif(`Fetching users failed with err: ${err}`);
-            }
-        };
-        fetchUsers();
+		(async () => {
+			await fetchUsers();
+		})()
+
     }, [ctx?.activeChat]);
 
     const { messageUser } = useMessageUser(ctx);
@@ -110,14 +116,17 @@ const ChatDetails = () => {
     };
 
     // Add members to the group/forum
-    const handleAddMembers = () => {
+    const handleToggleSearchMode = async () => {
         // @TODO: Add Members
-		if (searchMode == "ForumUserSearch") { // Default
-			handleUpdateSearchMode("GlobalUserSearch");
-		} else {
-			// Reset to default
-			handleUpdateSearchMode("ForumUserSearch")
-		}
+        if (searchMode == "ForumUserSearch") {
+            // Default
+            handleUpdateSearchMode("GlobalUserSearch"); 
+
+        } else {
+            // Reset to default
+            handleUpdateSearchMode("ForumUserSearch");
+			fetchUsers();
+        }
     };
 
     useEffect(() => {
@@ -129,26 +138,67 @@ const ChatDetails = () => {
         };
     }, []);
 
-	// Search Forum Users
-    type SearchMode = "ForumUserSearch"|"GlobalUserSearch";
-    const [searchMode, setSearchMode] = useState<"ForumUserSearch"|"GlobalUserSearch">("ForumUserSearch");
+    // Search Forum Users
+    type SearchMode = "ForumUserSearch" | "GlobalUserSearch";
+    const [searchMode, setSearchMode] = useState<
+        "ForumUserSearch" | "GlobalUserSearch"
+    >("ForumUserSearch");
     const handleUpdateSearchMode = (searchMode: SearchMode) => {
         setSearchMode(searchMode);
     };
-	const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleChangeSearchQuery = (e:any) => {
-		setSearchQuery(e.target.value);
-    }
-	const filteredUsers = useMemo(() => {
+    const handleChangeSearchQuery = (e: any) => {
+        setSearchQuery(e.target.value);
+    };
+    const filteredUsers = useMemo(() => {
+        // Do not filter if we are searching members to add to the forum
+        if (searchMode == "GlobalUserSearch") return;
         return users.filter((user) => {
-			if (user.username != undefined) {
-				return user.username?.toLowerCase().includes(searchQuery.toLowerCase());
-			} else {
-				return user.email?.toLowerCase().includes(searchQuery.toLowerCase());
-			}
+            if (user.username != undefined) {
+                return user.username
+                    ?.toLowerCase()
+                    .includes(searchQuery.toLowerCase());
+            } else {
+                return user.email
+                    ?.toLowerCase()
+                    .includes(searchQuery.toLowerCase());
+            }
         });
     }, [users, searchQuery]);
+	const searchUsersGlobally = debounce(async (emailOrUsername) => {
+		try {
+			const response = await client.service("users").find({
+				query: {
+					$or: [
+						{
+							email: {
+								$regex: emailOrUsername,
+								$options: "im",
+							},
+						},
+						{
+							username: {
+								$regex: emailOrUsername,
+								$options: "im",
+							},
+						},
+					],
+					// $limit: 10,
+				},
+			});
+			setUsers(response.data);
+			console.log(`global: ${users}`);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (err: any) {
+			ctx?.onNotif(`failed to search users with err: ${err}`);
+		}
+	}, 300);
+	useEffect(() => {
+		if (searchMode == "GlobalUserSearch" && searchQuery.trim() != "") {
+			searchUsersGlobally(searchQuery);
+		}
+	}, [searchQuery]);
 
     return (
         <div className="w-full h-[75vh] bg-white rounded-t-3xl px-4">
@@ -263,7 +313,7 @@ const ChatDetails = () => {
             <div className="mx-auto w-full max-w-3xl my-8 py-2 border-gray-500 border-b flex justify-between">
                 <input
                     type="text"
-					value={searchQuery}
+                    value={searchQuery}
                     onChange={handleChangeSearchQuery}
                     className="bg-transparent outline-none w-full"
                     placeholder={`${
@@ -284,8 +334,10 @@ const ChatDetails = () => {
             <ul className="mx-auto w-full max-h-[50vh] overflow-y-auto max-w-3xl">
                 <li className="border border-gray-200  mb-2">
                     <button
-                        className={`flex items-center gap-8 h-10 p-2 w-full font-bold hover:bg-indigo-50 ${searchMode == 'GlobalUserSearch' && "bg-indigo-100"}`}
-                        onClick={handleAddMembers}
+                        className={`flex items-center gap-8 h-10 p-2 w-full font-bold hover:bg-indigo-50 ${
+                            searchMode == "GlobalUserSearch" && "bg-indigo-100"
+                        }`}
+                        onClick={handleToggleSearchMode}
                     >
                         <GroupAddOutlinedIcon className="m-1 text-indigo-600" />
                         Add members
@@ -294,48 +346,44 @@ const ChatDetails = () => {
                 <li className="border border-gray-200  mb-2">
                     <button
                         className="flex items-center gap-8 h-10 p-2 w-full font-bold  hover:bg-indigo-50"
-                        onClick={handleAddMembers}
+                        onClick={handleToggleSearchMode}
                     >
                         <LinkOutlinedIcon className="m-1 text-indigo-600" />
                         Invite link
                     </button>
                 </li>
-                {filteredUsers.map((user: User) => (
-                    <li
-                        key={user._id}
-                        className="flex items-center justify-between p-2 text-sm my-2 bg-gray-50 rounded hover:bg-indigo-50"
-                    >
-                        <div className="flex items-center gap-8">
-                            <img
-                                src={user.avatar}
-                                height={32}
-                                width={32}
-                                className="rounded-full"
-                                onClick={() => {
-                                    handleShowUserProfile(user._id);
-                                }}
-                            />
-                            {ctx?.loggedInAs?._id == user._id ? (
-                                <p>You</p>
-                            ) : (
-                                <p>
-                                    {typeof user.username == "string" &&
-                                    user.username.trim().length > 0
-                                        ? user.username
-                                        : user.email}
-                                </p>
-                            )}
-                        </div>
-                        {ctx?.loggedInAs?._id != user._id && (
-                            <button
-                                className="font-medium underline"
-                                onClick={() => handleMessageUser(user)}
-                            >
-                                Message
-                            </button>
-                        )}
-                    </li>
-                ))}
+                {filteredUsers ? (
+                    <>
+                        {filteredUsers.map((user: User) => (
+							<li key={user._id}>
+								<UserListItem
+									user={user}
+									loggedInUserId={ctx?.loggedInAs?._id}
+									onShowUserProfile={() =>
+										handleShowUserProfile(user._id)
+									}
+									onMessageUser={() => handleMessageUser(user)}
+								/>
+							</li>
+                        ))}
+                    </>
+                ) : (
+                    <>
+                        {/**Applies when the user does a global search for new members */}
+                        {users.map((user: User) => (
+							<li key={user._id}>
+								<UserListItem
+									user={user}
+									loggedInUserId={ctx?.loggedInAs?._id}
+									onShowUserProfile={() =>
+										handleShowUserProfile(user._id)
+									}
+									onMessageUser={() => handleMessageUser(user)}
+								/>
+							</li>
+                        ))}
+                    </>
+                )}
             </ul>
         </div>
     );

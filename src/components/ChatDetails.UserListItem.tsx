@@ -8,6 +8,8 @@ type Props = {
     onShowUserProfile: (userId: string) => void;
     onMessageUser: (user: User) => void;
     isSelected?: boolean;
+    onRemoveUser?: (user: User) => void;
+    showActions?: boolean; // For showing actions that run against existing forum members, so its off for global search for new members.
 };
 
 const UserListItem = ({
@@ -15,7 +17,9 @@ const UserListItem = ({
     loggedInUserId,
     onShowUserProfile,
     onMessageUser,
-    isSelected
+    isSelected,
+    onRemoveUser = () => {},
+    showActions = false
 }: Props) => {
     return (
         <div
@@ -42,8 +46,12 @@ const UserListItem = ({
                     </p>
                 )}
             </div>
-            {loggedInUserId !== user._id && (
-                <Actions user={user} onMessageUser={() => onMessageUser(user)}/>
+            {showActions && loggedInUserId !== user._id && (
+                <Actions
+                    user={user}
+                    onMessageUser={() => onMessageUser(user)}
+                    onRemoveUser={() => onRemoveUser(user)}
+                />
             )}
         </div>
     );

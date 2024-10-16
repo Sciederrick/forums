@@ -229,6 +229,22 @@ const ChatDetails = () => {
 		}
 	}, [searchQuery]);
 
+    const handleRemoveUser = async (memberId: string) => {
+        console.log("🚀 ~ handleRemoveUser ~ memberId:", memberId)
+        try {
+            if (ctx?.activeChat?._id === 'undefined') throw Error('Missing active chat id');
+            await client
+                .service("chats")
+                .patch(ctx?.activeChat?._id, {
+                    $pull: { memberIds: memberId },
+                });
+            ctx?.onNotif(`Successfully removed user ${memberId}`);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            ctx?.onNotif(`failed to search users with err: ${err}`);
+        }
+    }
+
     return (
         <div className="w-full min-h-[75vh] bg-white rounded-t-3xl px-4">
             <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 max-w-3xl mx-auto text-center lg:bg-gray-50">
@@ -394,6 +410,10 @@ const ChatDetails = () => {
                                     onMessageUser={() =>
                                         handleMessageUser(user)
                                     }
+                                    onRemoveUser={() =>
+                                        handleRemoveUser(user._id)
+                                    }
+                                    showActions={true}
                                 />
                             </li>
                         ))}

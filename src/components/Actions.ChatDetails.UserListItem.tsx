@@ -6,8 +6,9 @@ import { User } from "../types";
 type Props = {
     user: User;
     onMessageUser: () => void;
+    onRemoveUser: () => void;
 };
-const Actions = ({user, onMessageUser}:Props) => {
+const Actions = ({ user, onMessageUser, onRemoveUser }: Props) => {
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -18,6 +19,15 @@ const Actions = ({user, onMessageUser}:Props) => {
 
     const open = Boolean(anchorEl);
     const id = open ? "simple-popover" : undefined;
+
+    const handleRemoveUser = () => {
+        onRemoveUser()
+        handleClose()
+    }
+    const handleMessageUser = () => {
+        onMessageUser()
+        handleClose()
+    }
 
     return (
         <div>
@@ -38,12 +48,21 @@ const Actions = ({user, onMessageUser}:Props) => {
                     horizontal: "right",
                 }}
             >
-                <button
-                    className="font-medium py-2 px-3"
-                    onClick={onMessageUser}
-                >
-                    Message {user.username || user.email}
-                </button>
+                <div className="flex flex-col">
+                    <button
+                        className="font-medium py-2 px-3 text-sm"
+                        onClick={handleMessageUser}
+                    >
+                        Message {user.username || user.email}
+                    </button>
+                    <hr />
+                    <button
+                        className="font-medium py-2 px-3 text-sm"
+                        onClick={handleRemoveUser}
+                    >
+                        Remove {user.username || user.email}
+                    </button>
+                </div>
             </Popover>
         </div>
     );

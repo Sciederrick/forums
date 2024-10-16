@@ -66,10 +66,14 @@ const ChatProfiles = () => {
         client.service("chats").on("created", handleNewChat);
         client.service("chats").on("patched", (updatedChat: Chat) => {
             // Update chats
+            console.log("🚀 ~ updatedChats ~ chats:", chats);
             const updatedChats = chats.map((chat) => {
                 return chat._id === updatedChat._id ? updatedChat : chat;
             });
-            setChats(updatedChats);
+            // For some reason, chats is empty `[]` whenever this block is run 🤔
+            // It runs perfectly, but:
+            // @TODO: find out why
+            if (chats.length > 0) setChats(updatedChats);
         });
 
         return () => {

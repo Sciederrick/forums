@@ -1,5 +1,7 @@
 import { User } from "../types";
 
+import Actions from "./Actions.ChatDetails.UserListItem";
+
 type Props = {
     user: User;
     loggedInUserId: string | undefined;
@@ -16,7 +18,11 @@ const UserListItem = ({
     isSelected
 }: Props) => {
     return (
-        <div className={`flex items-center justify-between p-2 text-sm my-2 bg-gray-50 rounded hover:bg-indigo-50 ${isSelected && "bg-green-200 hover:bg-green-200"}`}>
+        <div
+            className={`flex items-center justify-between p-2 text-sm my-2 bg-gray-50 rounded hover:bg-indigo-50 ${
+                isSelected && "bg-green-200 hover:bg-green-200"
+            }`}
+        >
             <div className="flex items-center gap-8">
                 <img
                     src={user.avatar}
@@ -37,12 +43,7 @@ const UserListItem = ({
                 )}
             </div>
             {loggedInUserId !== user._id && (
-                <button
-                    className="font-medium underline"
-                    onClick={() => onMessageUser(user)}
-                >
-                    Message
-                </button>
+                <Actions user={user} onMessageUser={() => onMessageUser(user)}/>
             )}
         </div>
     );

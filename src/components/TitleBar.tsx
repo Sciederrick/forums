@@ -7,7 +7,7 @@ const TitleBar = () => {
     const ctx = useContext(AppContext);
 
     const handleClickChatDetails = () => {
-        if (ctx?.activeChat) {
+        if (ctx?.activeChat && ctx?.activeChat.type == "group") {
             ctx?.onToggleChatDetails();
         }
     };
@@ -22,7 +22,7 @@ const TitleBar = () => {
             onClick={handleClickChatDetails}
         >
             {ctx?.activeChat?.name ?? ""}&nbsp;
-            {ctx?.activeChat && <InfoOutlinedIcon color="disabled" />}
+            {ctx?.activeChat && ctx?.activeChat.type == "group" && <InfoOutlinedIcon color="disabled" />}
         </Typography>
     );
 };

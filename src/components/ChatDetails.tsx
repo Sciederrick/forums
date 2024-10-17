@@ -376,7 +376,7 @@ const ChatDetails = () => {
                     )}
                 </button>
             </div>
-            <ul className="mx-auto w-full max-h-[50vh] overflow-y-auto max-w-3xl h-[50vh]">
+            <ul className="mx-auto w-full max-h-[60vh] overflow-y-auto max-w-3xl h-[60vh]">
                 <li className="border border-gray-200  mb-2">
                     <button
                         className={`flex items-center gap-8 h-10 p-2 w-full font-bold hover:bg-indigo-50 ${

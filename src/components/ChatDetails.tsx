@@ -527,19 +527,19 @@ const ChatDetails = () => {
                                 <SentimentDissatisfiedOutlinedIcon />
                                 Are you sure?
                             </span>
-                            
-                            <div className="flex gap-4 text-sm">
+
+                            <div className="flex gap-8 text-sm">
                                 <button
-                                    className="flex gap-8 items-center font-bold text-indigo-600 underline hover:bg-indigo-50"
+                                    className="px-6 font-bold text-indigo-600 underline hover:bg-indigo-50"
                                     onClick={dontExitForum}
                                 >
-                                    No, I want to stay
+                                    No<span className="hidden md:inline">, I want to stay</span>
                                 </button>
                                 <button
-                                    className="flex gap-8 items-center font-bold text-red-600 underline hover:bg-red-50"
+                                    className="px-6 font-bold text-red-600 underline hover:bg-red-50"
                                     onClick={exitForum}
                                 >
-                                    Yes, I want to leave
+                                    Yes<span className="hidden md:inline">, I want to leave</span>
                                 </button>
                             </div>
                         </div>

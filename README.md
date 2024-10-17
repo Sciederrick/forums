@@ -12,11 +12,24 @@
 - Add DM functionality - DONE
 - A user can update the name & description of the group - DONE
 - A user can add new members to the group - DONE
-- A user can only see their friends when creating a forum (when adding members)
+- Action buttons: (1/2 DONE)
+    - Exit Group - DONE
+    - Report Group
+
+    Select Menu: (Admins) - DONE
+    - Message User
+    - Remove User
+
+- Deploy on Digital Ocean
 - Adding a member sends a messsage request to accept the forum invite (accept or decline)
+- A user can only see their friends when creating a forum (when adding members)
 - Add role based actions for the group
     - PATCH(adding new members)
     - DELETE(delete member)
     - READ (view edit buttons)
 - Refactor for scalability (pagination)
+- A user should be able to invite others to their forum
+    - Via invite link
+    - Global search -> click invite button
+
 

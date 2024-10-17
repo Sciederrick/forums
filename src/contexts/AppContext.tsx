@@ -17,6 +17,8 @@ export type TypeAppContext = {
     onSetUserDetailsUserId: (id: string | null) => void;
     activeSidebarComponent: ActiveSidebarComponent;
     onSetActiveSidebarComponent: (component: ActiveSidebarComponent) => void;
+    iJustLeftThisForum: string | null;
+    onSetIJustLeftThisForum: (forumId: string | null) => void;
 };
 
 export const AppContext = createContext<TypeAppContext | undefined>(undefined);
@@ -64,6 +66,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setUserDetailsUserId(id);
     };
 
+    const [iJustLeftThisForum, setIJustLeftThisForum] = useState<string | null>(null);
+    const handleSetIJustLeftThisForum = (forumId: string | null) => {
+        setIJustLeftThisForum(forumId);
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -80,6 +87,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                 onSetActiveSidebarComponent: handleSetActiveSidebarComponent,
                 userDetailsUserId,
                 onSetUserDetailsUserId: handleSetUserDetailsUserId,
+                iJustLeftThisForum,
+                onSetIJustLeftThisForum: handleSetIJustLeftThisForum,
             }}
         >
             {children}

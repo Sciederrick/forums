@@ -11,6 +11,9 @@ import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
+import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
+import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
+
 import { debounce } from "lodash";
 
 import UserListItem from "./ChatDetails.UserListItem";
@@ -245,6 +248,47 @@ const ChatDetails = () => {
         }
     }
 
+    // Are you sure you want to exit the forum?
+    enum ExitForumChoices {
+        Yes = "Yes",
+        No = "No",
+        Maybe = "Maybe"
+    }
+    const [isExitForum, setIsExitForum] = useState(ExitForumChoices.No);
+    const areYouSureYouWantToExitForum = async () => {
+        setIsExitForum(ExitForumChoices.Maybe);
+    };
+    const exitForum = async () => {
+        try {
+            if (!ctx?.loggedInAs?._id) {
+                await client.logout();
+            }
+            if (!ctx?.activeChat?._id) {
+                throw Error('Active chat not set')
+            }
+            setIsExitForum(ExitForumChoices.Yes);
+            await client.service("chats").patch(ctx!.activeChat!._id, {
+                $pull: { memberIds: ctx!.loggedInAs!._id },
+            });
+            // Hide chat details modal
+            ctx?.onToggleChatDetails();
+            // Notify the sidebar that you have just left the forum
+            // This allows the forum you have just left to be filtered
+            ctx?.onSetIJustLeftThisForum(ctx!.activeChat!._id)
+            // Reset active chat
+            ctx?.onSetActiveChat(undefined);
+            // Show notification
+            ctx?.onNotif(`You left ${ctx?.activeChat?.name}`);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            ctx?.onNotif(`failed to search users with err: ${err}`);
+        }
+    };
+
+    const dontExitForum = () => {
+        setIsExitForum(ExitForumChoices.No);
+    }
+
     return (
         <div className="w-full min-h-[75vh] bg-white rounded-t-3xl px-4">
             <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 max-w-3xl mx-auto text-center lg:bg-gray-50">
@@ -376,8 +420,8 @@ const ChatDetails = () => {
                     )}
                 </button>
             </div>
-            <ul className="mx-auto w-full max-h-[60vh] overflow-y-auto max-w-3xl h-[60vh]">
-                <li className="border border-gray-200  mb-2">
+            <ul className="mx-auto w-full max-h-[60vh] overflow-y-auto max-w-3xl h-[60vh] relative mb-16">
+                <li className="border border-gray-200 mb-2 hover:border-indigo-100">
                     <button
                         className={`flex items-center gap-8 h-10 p-2 w-full font-bold hover:bg-indigo-50 ${
                             searchMode == "GlobalUserSearch" && "bg-indigo-100"
@@ -388,7 +432,7 @@ const ChatDetails = () => {
                         Add members
                     </button>
                 </li>
-                <li className="border border-gray-200  mb-2">
+                <li className="border border-gray-200 mb-2 hover:border-indigo-100">
                     <button
                         className="flex items-center gap-8 h-10 p-2 w-full font-bold  hover:bg-indigo-50"
                         onClick={handleToggleSearchMode}
@@ -467,6 +511,40 @@ const ChatDetails = () => {
                         )}
                     </>
                 )}
+                <li className="sticky bottom-0 w-full border hover:border-red-100">
+                    {isExitForum == ExitForumChoices.No && (
+                        <button
+                            className="flex gap-8 items-center h-10 p-2 w-full font-bold text-red-600 hover:bg-red-50"
+                            onClick={areYouSureYouWantToExitForum}
+                        >
+                            <ExitToAppOutlinedIcon />
+                            Exit group
+                        </button>
+                    )}
+                    {isExitForum == ExitForumChoices.Maybe && (
+                        <div className="flex gap-4 items-center px-2 h-10 justify-between bg-red-50">
+                            <span className="flex items-center gap-8">
+                                <SentimentDissatisfiedOutlinedIcon />
+                                Are you sure?
+                            </span>
+                            
+                            <div className="flex gap-4 text-sm">
+                                <button
+                                    className="flex gap-8 items-center font-bold text-indigo-600 underline hover:bg-indigo-50"
+                                    onClick={dontExitForum}
+                                >
+                                    No, I want to stay
+                                </button>
+                                <button
+                                    className="flex gap-8 items-center font-bold text-red-600 underline hover:bg-red-50"
+                                    onClick={exitForum}
+                                >
+                                    Yes, I want to leave
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </li>
             </ul>
         </div>
     );

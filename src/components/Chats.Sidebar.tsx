@@ -113,6 +113,18 @@ const ChatProfiles = () => {
         ctx?.onSetUserDetailsUserId(id);
     };
 
+    // When the user leaves a forum, filter that forum
+    useEffect(() => {
+        // filter
+        if (!ctx?.iJustLeftThisForum || chats.length === 0) return;
+        const filteredChats = chats.filter((chat) => {
+            return chat._id !== ctx!.iJustLeftThisForum;
+        });
+        setChats(filteredChats);
+        // reset
+        ctx!.onSetIJustLeftThisForum(null);
+    }, [ctx?.iJustLeftThisForum]);
+
     return (
         <div className="relative h-full">
             <Toolbar>

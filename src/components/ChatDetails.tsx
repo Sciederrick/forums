@@ -289,6 +289,10 @@ const ChatDetails = () => {
         setIsExitForum(ExitForumChoices.No);
     }
 
+    const closeModal = () => {
+        ctx?.onToggleChatDetails();
+    }
+
     return (
         <div className="w-full min-h-[75vh] bg-white rounded-t-3xl px-4">
             <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 max-w-3xl mx-auto text-center lg:bg-gray-50">
@@ -546,6 +550,10 @@ const ChatDetails = () => {
                     )}
                 </li>
             </ul>
+            <button className="mx-auto px-3 h-10 border rounded-sm flex items-center gap-2 mb-16 font-bold hover:bg-red-100" onClick={closeModal}>
+                <HighlightOffOutlinedIcon fontSize="small"/>
+                Close
+            </button>
         </div>
     );
 };

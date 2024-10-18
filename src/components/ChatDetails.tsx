@@ -294,7 +294,7 @@ const ChatDetails = () => {
     }
 
     return (
-        <div className="w-full min-h-[75vh] bg-white rounded-t-3xl px-4">
+        <div className="w-full min-h-[75vh] bg-white rounded-t-3xl px-4 relative">
             <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 max-w-3xl mx-auto text-center lg:bg-gray-50">
                 {isProcessing === "Name" ? (
                     <div className="w-[125px] h-[16px] bg-gray-300 animate-pulse inline-block">
@@ -424,7 +424,7 @@ const ChatDetails = () => {
                     )}
                 </button>
             </div>
-            <ul className="mx-auto w-full max-h-[60vh] overflow-y-auto max-w-3xl h-[60vh] relative mb-16">
+            <ul className="mx-auto w-full max-h-[50vh] overflow-y-auto max-w-3xl h-[50vh] relative mb-16">
                 <li className="border border-gray-200 mb-2 hover:border-indigo-100">
                     <button
                         className={`flex items-center gap-8 h-10 p-2 w-full font-bold hover:bg-indigo-50 ${
@@ -537,23 +537,34 @@ const ChatDetails = () => {
                                     className="px-6 font-bold text-indigo-600 underline hover:bg-indigo-50"
                                     onClick={dontExitForum}
                                 >
-                                    No<span className="hidden md:inline">, I want to stay</span>
+                                    No
+                                    <span className="hidden md:inline">
+                                        , I want to stay
+                                    </span>
                                 </button>
                                 <button
                                     className="px-6 font-bold text-red-600 underline hover:bg-red-50"
                                     onClick={exitForum}
                                 >
-                                    Yes<span className="hidden md:inline">, I want to leave</span>
+                                    Yes
+                                    <span className="hidden md:inline">
+                                        , I want to leave
+                                    </span>
                                 </button>
                             </div>
                         </div>
                     )}
                 </li>
             </ul>
-            <button className="mx-auto px-3 h-10 border rounded-sm flex items-center gap-2 mb-16 font-bold hover:bg-red-100" onClick={closeModal}>
-                <HighlightOffOutlinedIcon fontSize="small"/>
-                Close
-            </button>
+            <div className="absolute inset-x-0 bottom-0">
+                <button
+                    className="text-sm mx-auto px-3 h-10 border rounded-sm flex items-center gap-2 mb-8 font-bold hover:bg-gray-100"
+                    onClick={closeModal}
+                >
+                    <HighlightOffOutlinedIcon fontSize="small" />
+                    Close
+                </button>
+            </div>
         </div>
     );
 };

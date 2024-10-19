@@ -293,6 +293,17 @@ const ChatDetails = () => {
         ctx?.onToggleChatDetails();
     }
 
+    // Allow members to send invite links for their friends to join the forum
+    const copyInviteLink = () => {
+        if (ctx?.activeChat?._id) {
+            const inviteLink = `http://localhost:5173/${ctx!.activeChat!._id}`
+            navigator.clipboard.writeText(inviteLink);
+            ctx?.onNotif(`${inviteLink} copied to clipboard`);
+        } else {
+            ctx?.onNotif(`failed to copy invite link to clipboard`);
+        }
+    }
+
     return (
         <div className="w-full min-h-[75vh] bg-white rounded-t-3xl px-4 relative">
             <div className="w-full px-3 py-4 mt-4 flex flex-col gap-4 max-w-3xl mx-auto text-center lg:bg-gray-50">
@@ -439,7 +450,7 @@ const ChatDetails = () => {
                 <li className="border border-gray-200 mb-2 hover:border-indigo-100">
                     <button
                         className="flex items-center gap-8 h-10 p-2 w-full font-bold  hover:bg-indigo-50"
-                        onClick={handleToggleSearchMode}
+                        onClick={copyInviteLink}
                     >
                         <LinkOutlinedIcon className="m-1 text-indigo-600" />
                         Invite link

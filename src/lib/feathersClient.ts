@@ -5,7 +5,7 @@ import io from "socket.io-client";
 import authentication from "@feathersjs/authentication-client";
 
 const socket = io("http://localhost:3030"); // Replace with your server URL
-const client = new feathers.Feathers() as Record<string, any>; //Get rid of squigly lines (temporary solution). In the future, download types
+const client = new feathers.Feathers() as Record<string, any>; // Get rid of squigly lines (temporary solution). In the future, download types
 
 client.configure(socketio(socket));
 client.configure(authentication());

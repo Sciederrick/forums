@@ -78,7 +78,7 @@ const Messages = () => {
         }
     };
 
-    const bottomRef = useRef(null);
+    const bottomRef = useRef<HTMLLIElement>(null);
     const scrollToBottom = () => {
         bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
     };

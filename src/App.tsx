@@ -7,7 +7,7 @@ const App = () => {
     return (
         <Routes>
             {/* More general routes */}
-            <Route path="/chat" element={<ChatPage />} />
+            <Route path="/" element={<ChatPage />} />
 
             {/* Default fallback route (404 page) */}
             <Route path="*" element={<NotFound />} />

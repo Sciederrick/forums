@@ -20,9 +20,12 @@
     - Message User
     - Remove User
 
-- Deploy on Digital Ocean
-- Adding a member sends a messsage request to accept the forum invite (accept or decline)
-- A user can only see their friends when creating a forum (when adding members)
+- Deploy on Digital Ocean - DONE
+- Check for operational email account
+- Add 3rd party login
+    - Github
+    - Google
+- Adding a member sends a messsage request to accept the forum invite (accept or decline) via email
 - Add role based actions for the group
     - PATCH(adding new members)
     - DELETE(delete member)

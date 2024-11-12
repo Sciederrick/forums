@@ -72,7 +72,7 @@ const Auth = () => {
         try {
             e.preventDefault();
             // Add logic to login with Github
-            window.location.href = `${config.REACT_APP_API_BASE_URL}/oauth/github`;
+            window.location.href = `${config.REACT_APP_API_BASE_URL}oauth/github`;
         } catch (err: any) {
             ctx?.onNotif(`Login with Github failed with: ${err}`);
         }

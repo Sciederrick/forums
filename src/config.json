@@ -1,0 +1,9 @@
+{
+    "environment": "production",
+    "production": {
+        "REACT_APP_API_BASE_URL":"https://forums-backend.xyz/"
+    },
+    "development": {
+        "REACT_APP_API_BASE_URL":"http://localhost:3030/"
+    }
+}

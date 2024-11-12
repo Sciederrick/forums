@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import client from "../lib/feathersClient";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../contexts/AppContext";
+import config from "./../lib/loadConfig";
 
 const Auth = () => {
     useEffect(() => {
@@ -44,7 +45,7 @@ const Auth = () => {
                 email: formData.email,
                 password: formData.password,
             });
-            
+
             localStorage.setItem("feathers-jwt", response.accessToken);
             ctx?.onSetShowAuth(false);
             ctx?.onSetLoggedInUser(response.user);
@@ -71,7 +72,7 @@ const Auth = () => {
         try {
             e.preventDefault();
             // Add logic to login with Github
-            window.location.href = `${process.env.REACT_APP_API_BASE_URL}/oauth/github`;
+            window.location.href = `${config.REACT_APP_API_BASE_URL}/oauth/github`;
         } catch (err: any) {
             ctx?.onNotif(`Login with Github failed with: ${err}`);
         }

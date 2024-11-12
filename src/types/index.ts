@@ -1,3 +1,13 @@
+export interface Config {
+    environment: "production" | "development";
+    production: {
+        REACT_APP_API_BASE_URL: string;
+    },
+    development: {
+        REACT_APP_API_BASE_URL: string;
+    }
+}
+
 export interface User {
     _id: string;
     email: string;

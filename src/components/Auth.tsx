@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import client from "../lib/feathersClient";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../contexts/AppContext";
-import config from "./../lib/loadConfig";
+// import config from "./../lib/loadConfig";
 
 const Auth = () => {
     useEffect(() => {

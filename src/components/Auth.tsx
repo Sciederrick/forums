@@ -124,6 +124,7 @@ const Auth = () => {
                 fullWidth
                 type="submit"
                 onClick={(e) => loginWithGithub(e)}
+                disabled
             >
                 LOGIN WITH GITHUB
             </Button>

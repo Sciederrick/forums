@@ -72,7 +72,7 @@ const Auth = () => {
         try {
             e.preventDefault();
             // Add logic to login with Github
-            window.location.href = `http://localhost:3030/oauth/github`;
+            window.location.href = `https://forums-backend.xyz/oauth/github`;
         } catch (err: any) {
             ctx?.onNotif(`Login with Github failed with: ${err}`);
         }

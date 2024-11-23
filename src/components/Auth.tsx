@@ -68,15 +68,14 @@ const Auth = () => {
         }
     };
 
-    // const loginWithGithub = async (e: any) => {
-    //     try {
-    //         e.preventDefault();
-    //         // Add logic to login with Github
-    //         window.location.href = `https://forums-backend.xyz/oauth/github`;
-    //     } catch (err: any) {
-    //         ctx?.onNotif(`Login with Github failed with: ${err}`);
-    //     }
-    // };
+    const loginWithGithub = async (e: any) => {
+        try {
+            e.preventDefault();
+            window.location.href = `https://forums-backend.xyz/oauth/github`;
+        } catch (err: any) {
+            ctx?.onNotif(`Login with Github failed with: ${err}`);
+        }
+    };
 
     return (
         <form className="p-8 flex flex-col gap-8 md:max-w-xl md:mx-auto">
@@ -123,10 +122,8 @@ const Auth = () => {
                 size="large"
                 fullWidth
                 type="submit"
+                onClick={(e) => loginWithGithub(e)}
             >
-                <a href="https://forums-backend.xyz/oauth/github">
-                    LOGIN WITH GITHUB
-                </a>
                 LOGIN WITH GITHUB
             </Button>
         </form>

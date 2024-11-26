@@ -71,6 +71,7 @@ const Auth = () => {
     const loginWithGithub = async (e: any) => {
         try {
             e.preventDefault();
+            // window.location.href = `https://github.com/login/oauth/authorize?client_id=Ov23liJlNC2eYqihOyjZ&response_type=code&redirect_uri=https://forums-backend.xyz/oauth/github/callback`;
             window.location.href = `https://forums-backend.xyz/oauth/github`;
         } catch (err: any) {
             ctx?.onNotif(`Login with Github failed with: ${err}`);

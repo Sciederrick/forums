@@ -118,7 +118,7 @@ const Auth = () => {
             >
                 SIGNUP
             </Button>
-            <Button
+            {/* <Button
                 variant="contained"
                 size="large"
                 fullWidth
@@ -126,7 +126,7 @@ const Auth = () => {
                 onClick={(e) => loginWithGithub(e)}
             >
                 LOGIN WITH GITHUB
-            </Button>
+            </Button> */}
         </form>
     );
 };
